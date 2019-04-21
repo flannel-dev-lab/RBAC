@@ -17,7 +17,7 @@ func CreateSession(user User, session Session) (bool, error) {
 }
 
 // (RC-23) Core RBAC: Delete a given session with a given owner user
-func DeleteSession(user User, name string) (bool, error) {
+func DeleteSession(user User, sessionName string) (bool, error) {
     return false, errors.New("Not yet implemented")
 }
 
@@ -33,6 +33,6 @@ func DropActiveRole(user User, session Session, roleName string) (bool, error) {
 
 // (RC-14) Core RBAC: Returns a boolean of whether the subject of a given session is allowed
 // or not to perform a given operation on a given object
-func CheckAccess(session Session, operation Operation, object Object) (bool, err) {
+func CheckAccess(session Session, operation Operation, object Object) (bool, error) {
     return false, errors.New("Not yet implemented")
 }

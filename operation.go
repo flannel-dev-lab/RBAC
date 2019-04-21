@@ -7,6 +7,3 @@ type Operation struct {
     Name            string
     Description     string
 }
-
-func nah() {
-}

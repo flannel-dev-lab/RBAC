@@ -31,12 +31,12 @@ func DeleteRole(name string) (bool, error) {
 }
 
 // (RC-10) Core RBAC: Assigns a user to a role
-func AssignUser(user User, name string) (bool, error) {
+func AssignUser(user User, roleName string) (bool, error) {
     return false, errors.New("Not yet implemented")
 }
 
 // (RC-18) Core RBAC: Remove a user from a role
-func DeassignUser(user User, name string) (bool, error) {
+func DeassignUser(user User, roleName string) (bool, error) {
     return false, errors.New("Not yet implemented")
 }
 
@@ -47,5 +47,5 @@ func AssignedUsers(role Role) ([] int, error) {
 
 // (RC-36) Core RBAC: Return the set of active roles associated with a session
 func SessionRoles(session Session) ([]int, error) {
-    return false, errors.New("Not yet implemented")
+    return nil, errors.New("Not yet implemented")
 }
