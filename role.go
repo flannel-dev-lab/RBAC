@@ -14,7 +14,7 @@ import (
 
 // A Role is a job function within the context of an organization
 type Role struct {
-    RoleId          int
+    Id              int
     Name            string
     Description     string
 }
@@ -39,7 +39,19 @@ func AddRole(name string, description string) (bool, error) {
 
 // (RC-22) Core RBAC: Deletes an existing role
 func DeleteRole(name string) (bool, error) {
-    return false, errors.New("Not yet implemented")
+    DbInit()
+    
+    stmt, err := DBWrite.Prepare("DELETE FROM `rbac_role` WHERE `name`= ?")
+    if err != nil {
+        return false, err
+    }
+
+    _, err = stmt.Exec(name)
+    if err != nil {
+        return false, err
+    }
+
+    return true, nil
 }
 
 // (RC-10) Core RBAC: Assigns a user to a role

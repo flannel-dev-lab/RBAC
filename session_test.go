@@ -50,8 +50,8 @@ func TestDropActiveRole(t *testing.T) {
 
 func TestCheckAccess(t *testing.T) {
     session := Session{SessionId: 1, UserId: 1, Token: "123-123-123"}
-    operation := Operation{OperationId: 1, Name: "testOperation", Description: "Reserved permission for test"}
-    object := Object{ObjectId: 1, Name: "testObject", Description: "Reserved object for testing"}
+    operation := Operation{Id: 1, Name: "testOperation", Description: "Reserved permission for test"}
+    object := Object{Id: 1, Name: "testObject", Description: "Reserved object for testing"}
     
     _, err := CheckAccess(session, operation, object)
 

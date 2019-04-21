@@ -4,9 +4,10 @@ import (
     "testing"
 )
 
+const TestUserNameFluid = "test-user-name-fluid"
 
 func TestAddUser(t *testing.T) {
-    _, err := AddUser("testUser")
+    _, err := AddUser(TestUserNameFluid)
 
     if err != nil {
         t.Errorf("%v", err)
@@ -14,7 +15,7 @@ func TestAddUser(t *testing.T) {
 }
 
 func TestDeleteUser(t *testing.T) {
-    _, err := DeleteUser("testUser")
+    _, err := DeleteUser(TestUserNameFluid)
 
     if err != nil {
         t.Errorf("%v", err)

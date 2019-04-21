@@ -6,18 +6,22 @@ import (
 
 
 func TestGrantPermission(t *testing.T) {
-    object := Object{ObjectId: 1, Name: "testObject", Description: "Reserved object for testing"}
-    operation := Operation{OperationId: 1, Name: "testOperation", Description: "Reserved permission for test"}
-    _, err := GrantPermission(object, operation, "testRole")
+    // Create an object
+    object, err := CreateObject("test-object", "test-object-description")
+
+    _, err = GrantPermission(object, TestOperation, 1)
 
     if err != nil {
         t.Errorf("%v", err)
     }
+
+    // Cleanup
+    //_, err = RemoveObject(object)
 }
 
 func TestRevokePermission(t *testing.T) {
-    object := Object{ObjectId: 1, Name: "testObject", Description: "Reserved object for testing"}
-    operation := Operation{OperationId: 1, Name: "testOperation", Description: "Reserved permission for test"}
+    object := Object{Id: 1, Name: "testObject", Description: "Reserved object for testing"}
+    operation := Operation{Id: 1, Name: "testOperation", Description: "Reserved permission for test"}
     _, err := RevokePermission(object, operation, "testRole")
 
     if err != nil {
@@ -26,7 +30,7 @@ func TestRevokePermission(t *testing.T) {
 }
 
 func TestRolePermissions(t *testing.T) {
-    role := Role{RoleId: 1, Name: "roleName", Description:" Reserved role for testing"}
+    role := Role{Id: 1, Name: "roleName", Description:" Reserved role for testing"}
     _, err := RolePermissions(role)
 
     if err != nil {

@@ -4,12 +4,16 @@ import (
     "testing"
 )
 
-const TestRoleNameFluid = "fluid-role-name"
-const TestRoleNameStatic = "static-role-name"
+const TestRoleNameFluid = "test-role-name-fluid"
+const TestRoleDescriptionFluid = "Reserved for fluid role description testing"
+
+var (
+    TestRoleStatic = Role{Id:1, Name: "test-fluid-role-name", Description: "Reserved role for fluid testing"}
+)
 
 
 func TestAddRole(t *testing.T) {
-    _, err := AddRole("testRoleName", "test-role-description")
+    _, err := AddRole(TestRoleNameFluid, TestRoleDescriptionFluid)
 
     if err != nil {
         t.Errorf("%v", err)
@@ -17,7 +21,7 @@ func TestAddRole(t *testing.T) {
 }
 
 func TestDeleteRole(t *testing.T) {
-    _, err := DeleteRole("roleName")
+    _, err := DeleteRole(TestRoleNameFluid)
  
     if err != nil {
         t.Errorf("%v", err);
@@ -43,7 +47,7 @@ func TestDeassignUser(t *testing.T) {
 }
 
 func TestAssignedUsers(t *testing.T) {
-    role := Role{RoleId: 1, Name: "roleName", Description:"Reserved role for testing"}
+    role := Role{Id: 1, Name: "roleName", Description:"Reserved role for testing"}
     _, err := AssignedUsers(role);
 
     if err != nil {

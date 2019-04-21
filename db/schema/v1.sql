@@ -7,6 +7,13 @@ CREATE TABLE `rbac_role` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
+CREATE TABLE `rbac_user` (
+  `rbac_user_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`rbac_user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+
 CREATE TABLE `rbac_object` (
   `rbac_object_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -27,12 +34,9 @@ CREATE TABLE `rbac_operation` (
 
 CREATE TABLE `rbac_permission` (
   `rbac_permission_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `description` varchar(3000) NOT NULL,
   `rbac_object_id` int(11) unsigned NOT NULL,
   `rbac_operation_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`rbac_permission_id`),
-  UNIQUE `UK_NAME` (`name`),
   UNIQUE `UK_OBJECT_ID_OPERATION_ID` (`rbac_object_id`, `rbac_operation_id`),
   FOREIGN KEY `FK_RBAC_PERMISSION_RBAC_OBJECT_ID` (`rbac_object_id`)
       REFERENCES `rbac_object` (`rbac_object_id`)
@@ -45,12 +49,15 @@ CREATE TABLE `rbac_permission` (
 
 CREATE TABLE `rbac_user_role` (
   `rbac_user_role_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) unsigned NOT NULL,
+  `rbac_user_id` int(11) unsigned NOT NULL,
   `rbac_role_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`rbac_user_role_id`),
-  UNIQUE `UK_USER_ID_ROLE_ID` (`user_id`, `rbac_role_id`),
+  UNIQUE `UK_USER_ID_ROLE_ID` (`rbac_user_id`, `rbac_role_id`),
   FOREIGN KEY `FK_RBAC_USER_ROLE_RBAC_ROLE_ID` (`rbac_role_id`) 
       REFERENCES `rbac_role` (`rbac_role_id`)
+      ON DELETE CASCADE,
+  FOREIGN KEY `FK_RBAC_USER_ROLE_RBAC_USER_ID` (`rbac_user_id`) 
+      REFERENCES `rbac_user` (`rbac_user_id`)
       ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
