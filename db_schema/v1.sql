@@ -7,15 +7,6 @@ CREATE TABLE `rbac_role` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE `rbac_permission` (
-  `rbac_permission_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `description` varchar(3000) NOT NULL,
-  PRIMARY KEY (`rbac_permission_id`),
-  UNIQUE `UNIQUE_NAME` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-
 CREATE TABLE `rbac_object` (
   `rbac_object_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -31,6 +22,24 @@ CREATE TABLE `rbac_operation` (
   `description` varchar(3000) NOT NULL,
   PRIMARY KEY (`rbac_operation_id`),
   UNIQUE `UK_NAME` (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `rbac_permission` (
+  `rbac_permission_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(3000) NOT NULL,
+  `rbac_object_id` int(11) unsigned NOT NULL,
+  `rbac_operation_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`rbac_permission_id`),
+  UNIQUE `UK_NAME` (`name`),
+  UNIQUE `UK_OBJECT_ID_OPERATION_ID` (`rbac_object_id`, `rbac_operation_id`),
+  FOREIGN KEY `FK_RBAC_PERMISSION_RBAC_OBJECT_ID` (`rbac_object_id`)
+      REFERENCES `rbac_object` (`rbac_object_id`)
+      ON DELETE CASCADE,
+  FOREIGN KEY `FK_RBAC_PERMISSION_RBAC_OPERATION_ID` (`rbac_operation_id`)
+      REFERENCES `rbac_operation` (`rbac_operation_id`)
+      ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
@@ -57,36 +66,6 @@ CREATE TABLE `rbac_role_permission` (
       ON DELETE CASCADE,
   FOREIGN KEY `FK_RBAC_ROLE_PERMISSION_RBAC_PERMISSION_ID` (`rbac_permission_id`) 
       REFERENCES `rbac_permission` (`rbac_permission_id`)
-      ON DELETE CASCADE
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-
-CREATE TABLE `rbac_permission_object` (
-  `rbac_permission_object_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `rbac_permission_id` int(11) unsigned NOT NULL,
-  `rbac_object_id` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`rbac_permission_object_id`),
-  UNIQUE `UK_PERMISSION_ID_ROLE_ID` (`rbac_permission_id`, `rbac_object_id`),
-  FOREIGN KEY `FK_RBAC_PERMISSION_OBJECT_RBAC_PERMISSION_ID` (`rbac_permission_id`) 
-      REFERENCES `rbac_permission` (`rbac_permission_id`)
-      ON DELETE CASCADE,
-  FOREIGN KEY `FK_RBAC_PERMISSION_OBJECT_RBAC_OBJECT_ID` (`rbac_object_id`) 
-      REFERENCES `rbac_object` (`rbac_object_id`)
-      ON DELETE CASCADE
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-
-CREATE TABLE `rbac_permission_operation` (
-  `rbac_permission_operation_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `rbac_permission_id` int(11) unsigned NOT NULL,
-  `rbac_operation_id` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`rbac_permission_operation_id`),
-  UNIQUE `UK_PERMISSION_ID_OPERATION_ID` (`rbac_permission_id`, `rbac_operation_id`),
-  FOREIGN KEY `FK_RBAC_PERMISSION_OPERATION_RBAC_PERMISSION_ID` (`rbac_permission_id`) 
-      REFERENCES `rbac_permission` (`rbac_permission_id`)
-      ON DELETE CASCADE,
-  FOREIGN KEY `FK_RBAC_PERMISSION_OPERATION_RBAC_OPERATION_ID` (`rbac_operation_id`) 
-      REFERENCES `rbac_operation` (`rbac_operation_id`)
       ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
