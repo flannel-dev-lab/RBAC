@@ -1,0 +1,13 @@
+db_writer:
+    host: ""
+    name: ""
+    username: ""
+    password: ""
+    port: "3306"
+
+db_reader:
+    host: ""
+    name: ""
+    username: ""
+    password: """
+    port: "3306"

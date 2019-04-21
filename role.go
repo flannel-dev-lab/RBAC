@@ -22,7 +22,19 @@ type Role struct {
 
 // (RC-06) Core RBAC: Creates a new role
 func AddRole(name string, description string) (bool, error) {
-    return false, errors.New("Not yet implemented")
+    DbInit()
+    
+    stmt, err := DBWrite.Prepare("INSERT INTO `rbac_role` SET `name`= ?, description = ?")
+    if err != nil {
+        return false, err
+    }
+
+    _, err = stmt.Exec(name, description)
+    if err != nil {
+        return false, err
+    }
+
+    return true, nil
 }
 
 // (RC-22) Core RBAC: Deletes an existing role

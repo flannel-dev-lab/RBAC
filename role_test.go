@@ -4,9 +4,12 @@ import (
     "testing"
 )
 
+const TestRoleNameFluid = "fluid-role-name"
+const TestRoleNameStatic = "static-role-name"
+
 
 func TestAddRole(t *testing.T) {
-    _, err := AddRole("test-role-name", "test-role-description")
+    _, err := AddRole("testRoleName", "test-role-description")
 
     if err != nil {
         t.Errorf("%v", err)
