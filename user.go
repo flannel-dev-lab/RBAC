@@ -7,7 +7,7 @@ import (
 // A User represents a human being. A User can be extended to represent
 // machines, networks, etc if necessary
 type User struct {
-    UserId  int     // should come from the underlying system
+    Id  int     // should come from the underlying system
     Name    string  // this might need to be removed for target system
 }
 

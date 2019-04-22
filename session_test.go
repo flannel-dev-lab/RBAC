@@ -6,7 +6,7 @@ import (
 
 
 func TestCreateSession(t *testing.T) {
-    user := User{UserId: 1}
+    user := User{Id: 1}
     session := Session{SessionId: 1, UserId: 1, Token: "123-123-123"}
 
     _, err := CreateSession(user, session)
@@ -17,7 +17,7 @@ func TestCreateSession(t *testing.T) {
 }
 
 func TestDeleteSession(t *testing.T) {
-    user := User{UserId: 1}
+    user := User{Id: 1}
 
     _, err := DeleteSession(user, "testSession")
 
@@ -27,7 +27,7 @@ func TestDeleteSession(t *testing.T) {
 }
 
 func TestAddActiveRole(t *testing.T) {
-    user := User{UserId: 1}
+    user := User{Id: 1}
     session := Session{SessionId: 1, UserId: 1, Token: "123-123-123"}
 
     _, err := AddActiveRole(user, session, "testRole")
@@ -38,7 +38,7 @@ func TestAddActiveRole(t *testing.T) {
 }
 
 func TestDropActiveRole(t *testing.T) {
-    user := User{UserId: 1}
+    user := User{Id: 1}
     session := Session{SessionId: 1, UserId: 1, Token: "123-123-123"}
 
     _, err := DropActiveRole(user, session, "testRole")

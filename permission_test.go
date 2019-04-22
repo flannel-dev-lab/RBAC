@@ -49,7 +49,7 @@ func TestRevokePermission(t *testing.T) {
 }
 
 func TestRolePermissions(t *testing.T) {
-    role := Role{Id: 1, Name: "roleName", Description:" Reserved role for testing"}
+    role := Role{Id: 1, Name: "test-role", Description: "Reserved role for testing"}
     _, err := RolePermissions(role)
 
     if err != nil {
@@ -58,7 +58,7 @@ func TestRolePermissions(t *testing.T) {
 }
 
 func TestUserPermissions(t *testing.T) {
-    user := User{UserId: 1}
+    user := User{Id: 1}
 
     _, err := UserPermissions(user)
 

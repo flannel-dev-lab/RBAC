@@ -70,13 +70,57 @@ func RevokePermission(ob Object, op Operation, roleId int) (bool, error) {
 }
 
 // (RC-34) Core RBAC: Return the set of permissions granted to a given role
-func RolePermissions(role Role) ([]int, error) {
-    return nil, errors.New("Not yet implemented")
+func RolePermissions(role Role) ([]Permission, error) {
+    DbInit()
+
+    stmt, prepErr := DBRead.Prepare("SELECT rp.rbac_permission_id, rp.rbac_object_id, rp.rbac_operation_id FROM rbac_role_permission rrp JOIN rbac_permission rp ON rrp.rbac_permission_id = rp.rbac_permission_id WHERE rrp.rbac_role_id = ?")
+    if prepErr != nil {
+        return nil, prepErr
+    }
+
+    result, err := stmt.Query(role.Id)
+    if err != nil {
+        return nil, err
+    }
+
+    prms := []Permission{}
+    for result.Next() {
+        var perm Permission
+        err = result.Scan(&perm.Id, &perm.ObjectId, &perm.OperationId)
+        if err != nil {
+            return nil, err
+        }
+        prms = append(prms, perm)
+    }
+
+    return prms, nil
 }
 
 // (RC-43) Core RBAC: Return the set of permissions granted to a given user
-func UserPermissions(user User) ([]int, error) {
-    return nil, errors.New("Not yet implemented")
+func UserPermissions(user User) ([]Permission, error) {
+    DbInit()
+
+    stmt, prepErr := DBRead.Prepare("SELECT rp.rbac_permission_id, rp.rbac_object_id, rp.rbac_operation_id FROM rbac_user_role rur JOIN rbac_role_permission rrp ON rur.rbac_role_id = rrp.rbac_role_id JOIN rbac_permission rp ON rrp.rbac_permission_id = rp.rbac_permission_id WHERE rur.rbac_user_id = ?")
+    if prepErr != nil {
+        return nil, prepErr
+    }
+
+    result, err := stmt.Query(user.Id)
+    if err != nil {
+        return nil, err
+    }
+
+    prms := []Permission{}
+    for result.Next() {
+        var perm Permission
+        err = result.Scan(&perm.Id, &perm.ObjectId, &perm.OperationId)
+        if err != nil {
+            return nil, err
+        }
+        prms = append(prms, perm)
+    }
+
+    return prms, nil
 }
 
 // (RC-35) Core RBAC: Return the set of permissions assigned to a given session

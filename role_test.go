@@ -29,7 +29,7 @@ func TestDeleteRole(t *testing.T) {
 }
 
 func TestAssignUser(t *testing.T) {
-    user := User{UserId: 1}
+    user := User{Id: 1}
     _, err := AssignUser(user, "roleName");
 
     if err != nil {
@@ -38,7 +38,7 @@ func TestAssignUser(t *testing.T) {
 }
 
 func TestDeassignUser(t *testing.T) {
-    user := User{UserId: 1}
+    user := User{Id: 1}
     _, err := DeassignUser(user, "roleName");
 
     if err != nil {

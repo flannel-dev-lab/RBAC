@@ -8,7 +8,9 @@ var TestObject = Object{Id: 2, Name: "test-fluid-object-name", Description: "Res
 
 
 func TestRoleOperationsOnObject(t *testing.T) {
-    _, err := RoleOperationsOnObject(TestRoleStatic, TestObject)
+    role := Role{Id: 1, Name: "test-name", Description: "Test Description"}
+    object := Object{Id: 1, Name: "test-object", Description: "Test Description"}
+    _, err := RoleOperationsOnObject(role, object)
 
     if err != nil {
         t.Errorf("%v", err)
@@ -16,7 +18,7 @@ func TestRoleOperationsOnObject(t *testing.T) {
 }
 
 func TestUserOperationsOnObject(t *testing.T) {
-    user := User{UserId: 1}
+    user := User{Id: 1}
     object := Object{Id: 1, Name: "objectName", Description: "Reserved object for testing"}
     _, err := UserOperationsOnObject(user, object)
 

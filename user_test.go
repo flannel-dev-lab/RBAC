@@ -23,7 +23,7 @@ func TestDeleteUser(t *testing.T) {
 }
 
 func TestAssignedRoles(t *testing.T) {
-    user := User{UserId: 1}
+    user := User{Id: 1}
 
     _, err := AssignedRoles(user)
 
