@@ -18,7 +18,7 @@ type Permission struct {
 func GrantPermission(ob Object, op Operation, roleId int) (bool, error) {
     DbInit()
 
-    // Find a corresponding permission
+    // Find or create a corresponding permission
     prms, err := FindPermission(ob.Id, op.Id)
     if (err != nil) {
         if err == sql.ErrNoRows {
@@ -32,6 +32,7 @@ func GrantPermission(ob Object, op Operation, roleId int) (bool, error) {
         }
     }
 
+    // Attach the permission to the role
     stmt, stmtErr := DBWrite.Prepare("INSERT INTO `rbac_role_permission` SET `rbac_role_id` = ?, `rbac_permission_id` = ?")
     if stmtErr != nil {
         return false, stmtErr
@@ -46,8 +47,26 @@ func GrantPermission(ob Object, op Operation, roleId int) (bool, error) {
 }
 
 // (RC-32) Core RBAC: Revoke a permission from a role - must pair an object and an operation
-func RevokePermission(object Object, operation Operation, roleName string) (bool, error) {
-    return false, errors.New("Not yet implemented")
+// Spec deviation - accepting roleId instead of roleName
+func RevokePermission(ob Object, op Operation, roleId int) (bool, error) {
+    // Find a corresponding permission
+    prms, err := FindPermission(ob.Id, op.Id)
+    if (err != nil) {
+        return false, err
+    }
+
+    stmt, stmtErr := DBWrite.Prepare("DELETE FROM `rbac_role_permission` WHERE `rbac_role_id` = ? AND `rbac_permission_id` = ?")
+    if stmtErr != nil {
+        return false, stmtErr
+    }
+
+    _, err = stmt.Exec(roleId, prms.Id)
+    if err != nil {
+        return false, err
+    }
+
+    return true, nil
+
 }
 
 // (RC-34) Core RBAC: Return the set of permissions granted to a given role

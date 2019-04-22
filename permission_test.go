@@ -16,14 +16,33 @@ func TestGrantPermission(t *testing.T) {
     }
 
     // Cleanup
-    //_, err = RemoveObject(object)
+    _, err = RemoveObject(object)
+    if err != nil {
+        t.Errorf("%v", err)
+    }
 }
 
 func TestRevokePermission(t *testing.T) {
-    object := Object{Id: 1, Name: "testObject", Description: "Reserved object for testing"}
-    operation := Operation{Id: 1, Name: "testOperation", Description: "Reserved permission for test"}
-    _, err := RevokePermission(object, operation, "testRole")
+    // Create an object
+    object, err := CreateObject("test-object", "test-object-description")
+    if err != nil {
+        t.Errorf("%v", err)
+    }
+    
+    // Grant a permission
+    _, err = GrantPermission(object, TestOperation, 1)
+    if err != nil {
+        t.Errorf("%v", err)
+    }
 
+    // This is what we are actually testing for
+    _, err = RevokePermission(object, TestOperation, 1)
+    if err != nil {
+        t.Errorf("%v", err)
+    }
+
+    // Cleanup
+    _, err = RemoveObject(object)
     if err != nil {
         t.Errorf("%v", err)
     }
