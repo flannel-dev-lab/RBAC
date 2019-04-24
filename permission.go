@@ -1,7 +1,6 @@
 package RBAC
 
 import (
-    "errors"
     "database/sql"
 )
 
@@ -124,8 +123,30 @@ func UserPermissions(user User) ([]Permission, error) {
 }
 
 // (RC-35) Core RBAC: Return the set of permissions assigned to a given session
-func SessionPermissions(session Session) ([]int, error) {
-    return nil, errors.New("Not yet implemented")
+func SessionPermissions(session Session) ([]Permission, error) {
+    DbInit()
+
+    stmt, prepErr := DBRead.Prepare("SELECT rp.rbac_permission_id, rp.rbac_object_id, rp.rbac_operation_id FROM rbac_session rs JOIN rbac_user_role rur ON rs.rbac_user_id = rur.rbac_user_id JOIN rbac_role_permission rrp ON rur.rbac_role_id = rrp.rbac_role_id JOIN rbac_permission rp ON rrp.rbac_permission_id = rp.rbac_permission_id WHERE rs.name = ?")
+    if prepErr != nil {
+        return nil, prepErr
+    }
+
+    result, err := stmt.Query(session.Name)
+    if err != nil {
+        return nil, err
+    }
+
+    prms := []Permission{}
+    for result.Next() {
+        var perm Permission
+        err = result.Scan(&perm.Id, &perm.ObjectId, &perm.OperationId)
+        if err != nil {
+            return nil, err
+        }
+        prms = append(prms, perm)
+    }
+
+    return prms, nil
 }
 
 // Search for existing permission record
@@ -160,12 +181,12 @@ func CreatePermission(objectId int, operationId int) (Permission, error) {
         return prms, err
     }
 
-    newId, insertIdErr := result.LastInsertId()
+    insertId, insertIdErr := result.LastInsertId()
     if insertIdErr != nil {
         return prms, err
     }
 
-    prms.Id = int(newId)
+    prms.Id = int(insertId)
     prms.ObjectId = objectId
     prms.OperationId = operationId
 

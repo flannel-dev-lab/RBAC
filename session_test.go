@@ -7,9 +7,14 @@ import (
 
 func TestCreateSession(t *testing.T) {
     user := User{Id: 1}
-    session := Session{SessionId: 1, UserId: 1, Token: "123-123-123"}
+    session, err := CreateSession(user.Id, "test-session-token")
 
-    _, err := CreateSession(user, session)
+    if err != nil {
+        t.Errorf("%v", err)
+    }
+
+    // Cleanup
+    _, err = DeleteSession(user, session.Name)
 
     if err != nil {
         t.Errorf("%v", err)
@@ -18,9 +23,14 @@ func TestCreateSession(t *testing.T) {
 
 func TestDeleteSession(t *testing.T) {
     user := User{Id: 1}
+    session, err := CreateSession(user.Id, "test-session-token")
 
-    _, err := DeleteSession(user, "testSession")
+    if err != nil {
+        t.Errorf("%v", err)
+    }
 
+    // Delete session - this is what we are actually testing
+    _, err = DeleteSession(user, session.Name)
     if err != nil {
         t.Errorf("%v", err)
     }
@@ -28,9 +38,10 @@ func TestDeleteSession(t *testing.T) {
 
 func TestAddActiveRole(t *testing.T) {
     user := User{Id: 1}
-    session := Session{SessionId: 1, UserId: 1, Token: "123-123-123"}
+    session := Session{Id: 1, UserId: 1, Name: "123-123-123"}
+    role := Role{Id: 1, Name: "test-role", Description: "Reserved role for testing"}
 
-    _, err := AddActiveRole(user, session, "testRole")
+    _, err := AddActiveRole(user, session, role.Id )
 
     if err != nil {
         t.Errorf("%v", err)
@@ -39,7 +50,7 @@ func TestAddActiveRole(t *testing.T) {
 
 func TestDropActiveRole(t *testing.T) {
     user := User{Id: 1}
-    session := Session{SessionId: 1, UserId: 1, Token: "123-123-123"}
+    session := Session{Id: 1, UserId: 1, Name: "123-123-123"}
 
     _, err := DropActiveRole(user, session, "testRole")
 
@@ -49,7 +60,7 @@ func TestDropActiveRole(t *testing.T) {
 }
 
 func TestCheckAccess(t *testing.T) {
-    session := Session{SessionId: 1, UserId: 1, Token: "123-123-123"}
+    session := Session{Id: 1, UserId: 1, Name: "test-session"}
     operation := Operation{Id: 1, Name: "testOperation", Description: "Reserved permission for test"}
     object := Object{Id: 1, Name: "testObject", Description: "Reserved object for testing"}
     

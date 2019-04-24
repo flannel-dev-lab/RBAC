@@ -68,9 +68,19 @@ func TestUserPermissions(t *testing.T) {
 }
 
 func TestSessionPermissions(t *testing.T) {
-    session := Session{SessionId: 1, UserId: 1, Token: "123-123-123"}
-    _, err := SessionPermissions(session)
+    user := User{Id: 1}
+    session, sessionErr := CreateSession(user.Id, "123-123-123")
+    if sessionErr != nil {
+        t.Errorf("%v", sessionErr)
+    }
 
+    // Permissions - what we are actually testing
+    _, err := SessionPermissions(session)
+    if err != nil {
+        t.Errorf("%v", err)
+    }
+
+    _, err = DeleteSession(user, session.Name)
     if err != nil {
         t.Errorf("%v", err)
     }

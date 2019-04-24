@@ -32,6 +32,18 @@ CREATE TABLE `rbac_operation` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
+CREATE TABLE `rbac_session` (
+  `rbac_session_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `rbac_user_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`rbac_session_id`),
+  UNIQUE `UK_NAME` (`name`),
+  FOREIGN KEY `FK_RBAC_USER_ID` (`rbac_user_id`)
+      REFERENCES `rbac_user` (`rbac_user_id`)
+      ON DELETE CASCADE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+
 CREATE TABLE `rbac_permission` (
   `rbac_permission_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `rbac_object_id` int(11) unsigned NOT NULL,
