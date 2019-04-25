@@ -1,57 +1,39 @@
 package RBAC
 
 import (
+    "github.com/flannel-dev-lab/RBAC/database"
 )
 
-// A User represents a human being. A User can be extended to represent
-// machines, networks, etc if necessary
-type User struct {
-    Id  int     // should come from the underlying system
-    Name    string  // this might need to be removed for target system
+type UserObject struct {
+    DBService database.DatabaseService
+    User database.User
 }
 
 
 // (RC-04) Core RBAC: Creates a new RBAC user
-func AddUser(name string) (User, error) {
-    var user User
-    DbInit()
+func (userObject *UserObject) AddUser(name string) (err error) {
+    userInfo, err := userObject.DBService.AddUser(name)
 
-    stmt, stmtErr := DBWrite.Prepare("INSERT INTO `rbac_user` SET `name`= ?")
-    if stmtErr != nil {
-        return user, stmtErr
-    }
-
-    result, err := stmt.Exec(name)
     if err != nil {
-        return user, err
+        return err
     }
 
-    insertId, insertIdErr := result.LastInsertId()
-    if insertIdErr != nil {
-        return user, insertIdErr
-    }
-
-    user.Id = int(insertId)
-    user.Name = name
-
-    return user, nil
+    userObject.User = userInfo
+    return nil
 }
 
-// (RC-26) Core RBAC: Deletes an existing user from RBAC
-func DeleteUser(userId int) (bool, error) {
-    DbInit()
+// (RC-26) Core RBAC: Deletes an existing user from RBAC, Deletes Sessions and User assignments
+func (userObject *UserObject) DeleteUser(userId int64) (bool, error) {
+    status, err := userObject.DBService.DeleteUser(userId)
 
-    stmt, err := DBWrite.Prepare("DELETE FROM `rbac_user` WHERE `rbac_user_id`= ?")
     if err != nil {
         return false, err
     }
 
-    _, err = stmt.Exec(userId)
-    if err != nil {
-        return false, err
-    }
+    userObject.User = database.User{}
 
-    return true, nil
+    return status, nil
+
 }
 
 // (RC-09) Core RBAC: Returns a set of roles assigned to a given user
