@@ -6,34 +6,17 @@ import (
 
 type UserObject struct {
     DBService database.DatabaseService
-    User database.User
 }
 
 
 // (RC-04) Core RBAC: Creates a new RBAC user
-func (userObject *UserObject) AddUser(name string) (err error) {
-    userInfo, err := userObject.DBService.AddUser(name)
-
-    if err != nil {
-        return err
-    }
-
-    userObject.User = userInfo
-    return nil
+func (userObject *UserObject) AddUser(name string) (database.User, error) {
+    return userObject.DBService.AddUser(name)
 }
 
 // (RC-26) Core RBAC: Deletes an existing user from RBAC, Deletes Sessions and User assignments
-func (userObject *UserObject) DeleteUser(userId int64) (bool, error) {
-    status, err := userObject.DBService.DeleteUser(userId)
-
-    if err != nil {
-        return false, err
-    }
-
-    userObject.User = database.User{}
-
-    return status, nil
-
+func (userObject *UserObject) DeleteUser(userId int) (bool, error) {
+    return userObject.DBService.DeleteUser(userId)
 }
 
 // (RC-09) Core RBAC: Returns a set of roles assigned to a given user

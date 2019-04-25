@@ -10,82 +10,94 @@ var (
 )
 
 
+
+
 func TestAddRole(t *testing.T) {
-    role, err := AddRole("test-role", "Test role description")
+    setupRoleTest()
+    role, err := roleObject.AddRole("test-role", "Test role description")
 
     if err != nil {
         t.Errorf("%v", err)
     }
 
     // Cleanup
-    _, err = DeleteRole(role.Id)
+    _, err = roleObject.DeleteRole(role.Id)
+    tearDownRoleTest()
 }
 
 func TestDeleteRole(t *testing.T) {
-    // Create a role to delete
-    role, err := AddRole("test-role", "Test role description")
+    setupRoleTest()
+    role, err := roleObject.AddRole("test-role", "Test role description")
+
     if err != nil {
         t.Errorf("%v", err)
     }
 
-    // Delete the role - this is what we are really testing
-    _, err = DeleteRole(role.Id)
+    // Cleanup
+    _, err = roleObject.DeleteRole(role.Id)
     if err != nil {
         t.Errorf("%v", err)
     }
+    tearDownRoleTest()
 }
 
 func TestAssignUser(t *testing.T) {
+    setupRoleTest()
+    setupUserTest()
     // Create a new user
-    user, userErr := AddUser("test-user")
+    user, userErr := userObject.AddUser("test-user")
     if userErr != nil {
         t.Errorf("%v", userErr)
     }
 
     // Create a new role
-    role, roleErr := AddRole("test-role", "Test role description")
+    role, roleErr := roleObject.AddRole("test-role", "Test role description")
     if roleErr != nil {
         t.Errorf("%v", roleErr)
     }
 
     // Assign the user - what we are actually testing
-    _, err := AssignUser(user, role.Id)
+    _, err := roleObject.AssignUser(user.Id, role.Id)
     if err != nil {
         t.Errorf("%v", err)
     }
 
     // Cleanup
-    _, err = DeassignUser(user, role.Id)
+    _, err = roleObject.DeassignUser(user.Id, role.Id)
     if err != nil {
         t.Errorf("%v", err)
     }
 
-    _, err = DeleteUser(user.Id)
+    _, err = userObject.DeleteUser(user.Id)
     if err != nil {
         t.Errorf("%v", err)
     }
 
-    _, err = DeleteRole(role.Id)
+    _, err = roleObject.DeleteRole(role.Id)
     if err != nil {
         t.Errorf("%v", err)
     }
+    tearDownRoleTest()
+    tearDownUserTest()
 }
 
 func TestDeassignUser(t *testing.T) {
+    setupRoleTest()
+    setupUserTest()
     // Create a new user
-    user, userErr := AddUser("test-user")
+    user, userErr := userObject.AddUser("test-user")
     if userErr != nil {
         t.Errorf("%v", userErr)
     }
 
     // Create a new role
-    role, roleErr := AddRole("test-role", "Test role description")
+    role, roleErr := roleObject.AddRole("test-role", "Test role description")
     if roleErr != nil {
         t.Errorf("%v", roleErr)
     }
 
     // Assign the user
-    _, err := AssignUser(user, role.Id)
+    _, err := userObject.AssignUser(user, role.Id)
     if err != nil {
         t.Errorf("%v", err)
     }
