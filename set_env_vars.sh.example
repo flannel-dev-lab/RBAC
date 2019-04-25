@@ -1,0 +1,7 @@
+#!/bin/sh
+export RBAC_DB_DRIVER=""
+export RBAC_DB_HOST=""
+export RBAC_DB_NAME=""
+export RBAC_DB_USERNAME=""
+export RBAC_DB_PASSWORD=""
+export RBAC_DB_PORT=""

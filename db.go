@@ -1,44 +1,32 @@
 package RBAC
 
 import (
-    "database/sql"
-    _ "github.com/go-sql-driver/mysql"
+    "os"
+    "RBAC/database"
 )
 
 var (
-    DbPoolReady bool
-
-    DBRead  *sql.DB
-    DBWrite *sql.DB
+    DbReady bool
+    DB DBService
 )
 
+// Used for testing to load DB from environment variables
 func DbInit() {
-    if !DbPoolReady {
-        LoadConfiguration()
-        ConnectMysqlPool()
-    
-        DbPoolReady = true
+    if !DbReady {
+        driver := os.Getenv("RBAC_DB_DRIVER")
+        username := os.Getenv("RBAC_DB_USERNAME")
+        password := os.Getenv("RBAC_DB_PASSWORD")
+        hostname := os.Getenv("RBAC_DB_HOSTNAME")
+        dbname := os.Getenv("RBAC_DB_NAME")
+        port := os.Getenv("RBAC_DB_PORT")        
+
+        DbConnect(driver, username, password, hostname, dbname, port)
+
+        DbReady = true
     }
 }
 
-func ConnectMysqlPool() {
-    reader, err := sql.Open("mysql", Config.DBReader.Username+":"+Config.DBReader.Password+"@tcp("+Config.DBReader.Host+":"+Config.DBReader.Port+")/"+Config.DBReader.Name)
-
-    // if there is an error opening the connection, handle it
-    if err != nil {
-        panic(err.Error())
-    }
-
-    DBRead = reader
-
-    writer, err := sql.Open("mysql", Config.DBWriter.Username+":"+Config.DBWriter.Password+"@tcp("+Config.DBWriter.Host+":"+Config.DBWriter.Port+")/"+Config.DBWriter.Name)
-
-    // if there is an error opening the connection, handle it
-    if err != nil {
-        panic(err.Error())
-    }
-
-    DBWrite = writer
-
-    return;
+func DbConnect(driver string, username string, password string, hostname string, databaseName string, port string)  {
+    DB, _ := database.CreateDatabaseObject(driver)
+    DB.CreateDBConnection(driver, username, password, hostname, databaseName, port)
 }

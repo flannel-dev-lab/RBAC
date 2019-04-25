@@ -8,6 +8,9 @@ var TestObject = Object{Id: 2, Name: "test-fluid-object-name", Description: "Res
 
 
 func TestRoleOperationsOnObject(t *testing.T) {
+    DbConnect("mysql", "asdf", "asdfaasdf", "awefawef", "rerg", 3306)
+
+
     role := Role{Id: 1, Name: "test-name", Description: "Test Description"}
     object := Object{Id: 1, Name: "test-object", Description: "Test Description"}
     _, err := RoleOperationsOnObject(role, object)
