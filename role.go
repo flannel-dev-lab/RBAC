@@ -40,9 +40,9 @@ func (roleObject * RoleObject) AssignedUsers(roleId int) ([]database.User, error
 }
 
 // (RC-36) Core RBAC: Return the set of active roles associated with a session
-func SessionRoles(session Session) ([]Role, error) {
+/*func SessionRoles(session Session) ([]Role, error) {
     // Not implemented
     roles := []Role{}
     return roles, nil
 }
-
+*/

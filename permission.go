@@ -1,5 +1,5 @@
 package RBAC
-
+/*
 import (
     "database/sql"
 )
@@ -192,3 +192,4 @@ func CreatePermission(objectId int, operationId int) (Permission, error) {
 
     return prms, nil
 }
+*/

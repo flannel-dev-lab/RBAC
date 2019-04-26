@@ -8,7 +8,7 @@ type RBACObject struct {
 
 // (RC-33) Core RBAC: Returns the set of operations a given role
 // is permitted to perform on a given object
-func RoleOperationsOnObject(role Role, object Object) ([]Operation, error) {
+/*func RoleOperationsOnObject(role Role, object Object) ([]Operation, error) {
     DbInit()
 
     stmt, prepErr := DBRead.Prepare("SELECT ro.rbac_operation_id, ro.name, ro.`description` FROM rbac_role_permission rrp JOIN rbac_permission rp ON rrp.rbac_permission_id = rp.rbac_permission_id JOIN rbac_operation ro ON rp.rbac_operation_id = ro.rbac_operation_id WHERE rrp.rbac_role_id = ? AND rp.rbac_object_id = ?")
@@ -60,7 +60,7 @@ func UserOperationsOnObject(user User, object Object) ([]Operation, error) {
     }
 
     return ops, nil
-}
+}*/
 
 // Create an Object
 func (rbacObject *RBACObject) CreateObject(name, description string) (database.Object, error) {
