@@ -15,7 +15,7 @@ type RoleObject struct {
 }
 
 // (RC-06) Core RBAC: Creates a new role
-func (roleObject * RoleObject) AddRole(name string, description string) (database.Role, error) {
+func (roleObject * RoleObject) AddRole(name, description string) (database.Role, error) {
     return roleObject.DBService.AddRole(name, description)
 }
 
@@ -35,30 +35,8 @@ func (roleObject * RoleObject) DeassignUser(userId int, roleId int) (bool, error
 }
 
 // (RC-11) Core RBAC: Return the set of users assigned to a given role
-func AssignedUsers(roleId int) ([]User, error) {
-    DbInit()
-
-    stmt, prepErr := DBRead.Prepare("SELECT `rbac_user_id` FROM `rbac_user_role` WHERE `rbac_role_id` = ?")
-    if prepErr != nil {
-        return nil, prepErr
-    }
-
-    result, err := stmt.Query(roleId)
-    if err != nil {
-        return nil, err
-    }
-
-    users := []User{}
-    for result.Next() {
-        var user User
-        err = result.Scan(&user.Id)
-        if err != nil {
-            return nil, err
-        }
-        users = append(users, user)
-    }
-
-    return users, nil
+func (roleObject * RoleObject) AssignedUsers(roleId int) ([]database.User, error) {
+    return roleObject.DBService.AssignedUsers(roleId)
 }
 
 // (RC-36) Core RBAC: Return the set of active roles associated with a session

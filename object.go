@@ -1,15 +1,10 @@
 package RBAC
 
-import (
-)
+import "github.com/flannel-dev-lab/RBAC/database"
 
-// An object can be any system resource subject to access control
-type Object struct {
-    Id              int
-    Name            string
-    Description     string
+type RBACObject struct {
+    DBService database.DatabaseService
 }
-
 
 // (RC-33) Core RBAC: Returns the set of operations a given role
 // is permitted to perform on a given object
@@ -68,46 +63,11 @@ func UserOperationsOnObject(user User, object Object) ([]Operation, error) {
 }
 
 // Create an Object
-func CreateObject(name string, description string) (Object, error) {
-    var object Object
-
-    DbInit()
-    
-    stmt, prepErr := DBWrite.Prepare("INSERT INTO `rbac_object` SET `name`= ?, description = ?")
-    if prepErr != nil {
-        return object, prepErr
-    }
-
-    result, err := stmt.Exec(name, description)
-    if err != nil {
-        return object, err
-    }
-
-    insertId, insertIdErr := result.LastInsertId()
-    if insertIdErr != nil {
-        return object, insertIdErr
-    }
-
-    object.Id = int(insertId)
-    object.Name = name
-    object.Description = description
-
-    return object, nil
+func (rbacObject *RBACObject) CreateObject(name, description string) (database.Object, error) {
+    return rbacObject.DBService.CreateObject(name, description)
 }
 
 // Remove an Object
-func RemoveObject(object Object) (bool, error) {
-    DbInit()
-
-    stmt, prepErr := DBWrite.Prepare("DELETE FROM `rbac_object` WHERE `rbac_object_id` = ?")
-    if prepErr != nil {
-        return false, prepErr
-    }
-
-    _, err := stmt.Exec(object.Id)
-    if err != nil {
-        return false, err
-    }
-
-    return true, nil
+func (rbacObject *RBACObject) RemoveObject(objectId int) (bool, error) {
+    return rbacObject.DBService.RemoveObject(objectId)
 }

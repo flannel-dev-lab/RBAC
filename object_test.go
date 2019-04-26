@@ -31,24 +31,33 @@ func TestUserOperationsOnObject(t *testing.T) {
 }
 
 func TestCreateObject(t *testing.T) {
-    object, err := CreateObject("test-object", "test-object-description")
+    setupRBACObjectTest()
+    object, err := rbacObject.CreateObject("test-object", "test-object-description")
 
     if err != nil {
         t.Errorf("%v", err)
     }
 
     // Cleanup
-    _, err = RemoveObject(object)
+    _, err = rbacObject.RemoveObject(object.Id)
+    tearDownRBACObjectTest()
 }
 
 func TestRemoveObject(t *testing.T) {
+    setupRBACObjectTest()
     // Create an object to remove
-    object, err := CreateObject("test-object", "test-object-description")
-
-    // Remove the object
-    _, err = RemoveObject(object)
+    object, err := rbacObject.CreateObject("test-object", "test-object-description")
 
     if err != nil {
         t.Errorf("%v", err)
     }
+
+    // Remove the object
+    _, err = rbacObject.RemoveObject(object.Id)
+
+    if err != nil {
+        t.Errorf("%v", err)
+    }
+    tearDownRBACObjectTest()
 }
+

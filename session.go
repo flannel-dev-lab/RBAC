@@ -1,70 +1,34 @@
 package RBAC
 
-import (
-)
+import "github.com/flannel-dev-lab/RBAC/database"
 
-// A Session represents a user as owner and an active role set
-type Session struct {
-    Id              int
-    Name            string
-    UserId          int
+type SessionObject struct {
+    DBService database.DatabaseService
 }
 
 // (RC-16) Core RBAC: Create a new session with a user as owner and an active role set
-func CreateSession(userId int, name string) (Session, error) { 
-    var session Session
-    DbInit()
-
-    stmt, stmtErr := DBWrite.Prepare("INSERT INTO `rbac_session` SET `name`= ?, `rbac_user_id` = ?")
-    if stmtErr != nil {
-        return session, stmtErr
-    }
-
-    result, err := stmt.Exec(name, userId)
-    if err != nil {
-        return session, err
-    }
-
-    insertId, insertIdErr := result.LastInsertId()
-    if insertIdErr != nil {
-        return session, insertIdErr
-    }
-
-    session.Id = int(insertId)
-    session.Name = name
-    session.UserId = userId
-
-    return session, nil
+func (sessionObject *SessionObject) CreateSession(userId int, name string) (database.Session, error) {
+    return sessionObject.DBService.CreateSession(userId, name)
 }
 
 // (RC-23) Core RBAC: Delete a given session with a given owner user
-func DeleteSession(user User, sessionName string) (bool, error) {
-    DbInit()
-
-    stmt, stmtErr := DBWrite.Prepare("DELETE FROM `rbac_session` WHERE `rbac_user_id`= ? AND `name` = ?")
-    if stmtErr != nil {
-        return false, stmtErr
-    }
-
-    _, err := stmt.Exec(user.Id, sessionName)
-    if err != nil {
-        return false, err
-    }
-
-    return true, nil
+func (sessionObject *SessionObject) DeleteSession(userId int, sessionName string) (bool, error) {
+    return sessionObject.DBService.DeleteSession(userId, sessionName)
 }
 
 // (RC-01) Core RBAC: Add a role as an active role of a session whose owner is a given user
-func AddActiveRole(user User, session Session, roleId int) (bool, error) {
+// TODO
+/*func AddActiveRole(user User, session Session, roleId int) (bool, error) {
     // Not implemented currently
     return true, nil
-}
+}*/
 
 // (RC-27) Core RBAC: Delete a role from the active role set of a session owned by a given user
-func DropActiveRole(user User, session Session, roleName string) (bool, error) {
+// TODO
+/*func DropActiveRole(user User, session Session, roleName string) (bool, error) {
     // Not implemented currently
     return true, nil
-}
+}*/
 
 // (RC-14) Core RBAC: Returns a boolean of whether the subject of a given session is allowed
 // or not to perform a given operation on a given object

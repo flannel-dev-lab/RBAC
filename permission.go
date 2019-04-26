@@ -19,7 +19,7 @@ func GrantPermission(ob Object, op Operation, roleId int) (bool, error) {
 
     // Find or create a corresponding permission
     prms, err := FindPermission(ob.Id, op.Id)
-    if (err != nil) {
+    if err != nil {
         if err == sql.ErrNoRows {
             // Create a new permission record if one couldn't be found
             prms, err = CreatePermission(ob.Id, op.Id)

@@ -1,6 +1,7 @@
 package RBAC
 
 import (
+    "github.com/flannel-dev-lab/RBAC/database"
     "testing"
 )
 
@@ -97,36 +98,40 @@ func TestDeassignUser(t *testing.T) {
     }
 
     // Assign the user
-    _, err := userObject.AssignUser(user, role.Id)
+    _, err := roleObject.AssignUser(user.Id, role.Id)
     if err != nil {
         t.Errorf("%v", err)
     }
 
     // Deassign the user - what we are actually testing
-    _, err = DeassignUser(user, role.Id)
+    _, err = roleObject.DeassignUser(user.Id, role.Id)
     if err != nil {
         t.Errorf("%v", err)
     }
 
     // Cleanup
-    _, err = DeleteUser(user.Id)
+    _, err = userObject.DeleteUser(user.Id)
     if err != nil {
         t.Errorf("%v", err)
     }
 
-    _, err = DeleteRole(role.Id)
+    _, err = roleObject.DeleteRole(role.Id)
     if err != nil {
         t.Errorf("%v", err)
     }
+    tearDownUserTest()
+    tearDownRoleTest()
 }
 
 func TestAssignedUsers(t *testing.T) {
-    role := Role{Id: 1, Name: "roleName", Description:"Reserved role for testing"}
-    _, err := AssignedUsers(role.Id);
+    setupRoleTest()
+    role := database.Role{Id: 1, Name: "roleName", Description:"Reserved role for testing"}
+    _, err := roleObject.AssignedUsers(role.Id)
 
     if err != nil {
-        t.Errorf("%v", err);
+        t.Errorf("%v", err)
     }
+    tearDownRoleTest()
 }
 
 func TestSessionRoles(t *testing.T) {

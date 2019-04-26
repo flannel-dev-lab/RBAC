@@ -1,39 +1,44 @@
 package RBAC
 
 import (
+    "github.com/flannel-dev-lab/RBAC/database"
     "testing"
 )
 
 
 func TestCreateSession(t *testing.T) {
-    user := User{Id: 1}
-    session, err := CreateSession(user.Id, "test-session-token")
+    setupSessionTest()
+    user := database.User{Id: 1}
+    session, err := sessionObject.DBService.CreateSession(user.Id, "test-session-token")
 
     if err != nil {
         t.Errorf("%v", err)
     }
 
     // Cleanup
-    _, err = DeleteSession(user, session.Name)
+    _, err = sessionObject.DeleteSession(user.Id, session.Name)
 
     if err != nil {
         t.Errorf("%v", err)
     }
+    tearDownSessionTest()
 }
 
 func TestDeleteSession(t *testing.T) {
-    user := User{Id: 1}
-    session, err := CreateSession(user.Id, "test-session-token")
+    setupSessionTest()
+    user := database.User{Id: 1}
+    session, err := sessionObject.DBService.CreateSession(user.Id, "test-session-token")
 
     if err != nil {
         t.Errorf("%v", err)
     }
 
     // Delete session - this is what we are actually testing
-    _, err = DeleteSession(user, session.Name)
+    _, err = sessionObject.DBService.DeleteSession(user.Id, session.Name)
     if err != nil {
         t.Errorf("%v", err)
     }
+    tearDownSessionTest()
 }
 
 func TestAddActiveRole(t *testing.T) {
