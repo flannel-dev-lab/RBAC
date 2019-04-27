@@ -1,9 +1,11 @@
 package mysql
 
-import "github.com/flannel-dev-lab/RBAC/database"
+import (
+	"github.com/flannel-dev-lab/RBAC/vars"
+)
 
 // (RC-16) Core RBAC: Create a new session with a user as owner and an active role set
-func (databaseService *DatabaseService) CreateSession(userId int, name string) (session database.Session, err error) {
+func (databaseService *DatabaseService) CreateSession(userId int, name string) (session vars.Session, err error) {
 	stmt, err := databaseService.Conn.Prepare("INSERT INTO `rbac_session` SET `name`= ?, `rbac_user_id` = ?")
 	if err != nil {
 		return session, err

@@ -1,7 +1,8 @@
 package RBAC
 
 import (
-    "testing"
+	"github.com/flannel-dev-lab/RBAC/vars"
+	"testing"
 )
 
 
@@ -49,7 +50,7 @@ func TestRevokePermission(t *testing.T) {
 }
 
 func TestRolePermissions(t *testing.T) {
-    role := Role{Id: 1, Name: "test-role", Description: "Reserved role for testing"}
+    role := vars.Role{Id: 1, Name: "test-role", Description: "Reserved role for testing"}
     _, err := RolePermissions(role)
 
     if err != nil {
@@ -58,7 +59,7 @@ func TestRolePermissions(t *testing.T) {
 }
 
 func TestUserPermissions(t *testing.T) {
-    user := User{Id: 1}
+    user := vars.User{Id: 1}
 
     _, err := UserPermissions(user)
 
@@ -68,7 +69,7 @@ func TestUserPermissions(t *testing.T) {
 }
 
 func TestSessionPermissions(t *testing.T) {
-    user := User{Id: 1}
+    user := vars.User{Id: 1}
     session, sessionErr := CreateSession(user.Id, "123-123-123")
     if sessionErr != nil {
         t.Errorf("%v", sessionErr)

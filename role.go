@@ -8,14 +8,17 @@
 // to facilitate access control at any size.
 package RBAC
 
-import "github.com/flannel-dev-lab/RBAC/database"
+import (
+    "github.com/flannel-dev-lab/RBAC/database"
+    "github.com/flannel-dev-lab/RBAC/vars"
+)
 
 type RoleObject struct {
     DBService database.DatabaseService
 }
 
 // (RC-06) Core RBAC: Creates a new role
-func (roleObject * RoleObject) AddRole(name, description string) (database.Role, error) {
+func (roleObject * RoleObject) AddRole(name, description string) (vars.Role, error) {
     return roleObject.DBService.AddRole(name, description)
 }
 
@@ -35,7 +38,7 @@ func (roleObject * RoleObject) DeassignUser(userId int, roleId int) (bool, error
 }
 
 // (RC-11) Core RBAC: Return the set of users assigned to a given role
-func (roleObject * RoleObject) AssignedUsers(roleId int) ([]database.User, error) {
+func (roleObject * RoleObject) AssignedUsers(roleId int) ([]vars.User, error) {
     return roleObject.DBService.AssignedUsers(roleId)
 }
 

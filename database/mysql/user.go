@@ -1,9 +1,11 @@
 package mysql
 
-import "github.com/flannel-dev-lab/RBAC/database"
+import (
+	"github.com/flannel-dev-lab/RBAC/vars"
+)
 
 // (RC-04) Core RBAC: Creates a new RBAC user.  The User will not carry any sessions during the creation
-func (databaseService *DatabaseService) AddUser(name string) (user database.User, err error) {
+func (databaseService *DatabaseService) AddUser(name string) (user vars.User, err error) {
 
 	stmt, err := databaseService.Conn.Prepare("INSERT INTO `rbac_user` SET `name`= ?")
 	if err != nil {
@@ -29,7 +31,7 @@ func (databaseService *DatabaseService) AddUser(name string) (user database.User
 // (RC-26) Core RBAC: Deletes an existing user from RBAC, Deletes Sessions and User assignments
 func (databaseService *DatabaseService) DeleteUser(userId int) (bool, error) {
 	// TODO Delete User Assignments and Delete Sessions
-	stmt, err := databaseService.Conn.Prepare("DELETE FROM `rbac_user` WHERE `name`= ?")
+	stmt, err := databaseService.Conn.Prepare("DELETE FROM `rbac_user` WHERE `rbac_user_id`= ?")
 
 	if err != nil {
 		return false, err
@@ -44,7 +46,7 @@ func (databaseService *DatabaseService) DeleteUser(userId int) (bool, error) {
 }
 
 // (RC-09) Core RBAC: Returns a set of roles assigned to a given user
-func (databaseService *DatabaseService) AssignedRoles(userId int) ([]database.Role, error) {
+func (databaseService *DatabaseService) AssignedRoles(userId int) ([]vars.Role, error) {
 	stmt, prepErr := databaseService.Conn.Prepare("SELECT `rbac_role_id` FROM `rbac_user_role` WHERE `rbac_user_id` = ?")
 	if prepErr != nil {
 		return nil, prepErr
@@ -55,9 +57,9 @@ func (databaseService *DatabaseService) AssignedRoles(userId int) ([]database.Ro
 		return nil, err
 	}
 
-	var roles []database.Role
+	var roles []vars.Role
 	for result.Next() {
-		var role database.Role
+		var role vars.Role
 		err = result.Scan(&role.Id)
 		if err != nil {
 			return nil, err

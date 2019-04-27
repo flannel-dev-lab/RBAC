@@ -2,12 +2,13 @@ package RBAC
 
 import (
     "github.com/flannel-dev-lab/RBAC/database"
+    "github.com/flannel-dev-lab/RBAC/vars"
     "testing"
 )
 
 
 var (
-    TestRoleStatic = Role{Id:1, Name: "test-fluid-role-name", Description: "Reserved role for fluid testing"}
+    TestRoleStatic = vars.Role{Id: 1, Name: "test-fluid-role-name", Description: "Reserved role for fluid testing"}
 )
 
 
@@ -135,7 +136,7 @@ func TestAssignedUsers(t *testing.T) {
 }
 
 func TestSessionRoles(t *testing.T) {
-    session := Session{Id: 1, UserId: 1, Name: "123-123-123"}
+    session := vars.Session{Id: 1, UserId: 1, Name: "123-123-123"}
     _, err := SessionRoles(session);
 
     if err != nil {

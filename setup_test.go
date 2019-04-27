@@ -38,35 +38,6 @@ func tearDownRoleTest() {
 }
 
 // User test parameters
-var userObject UserObject
-
-func setupUserTest() {
-	dbService, err := database.CreateDatabaseObject("mysql")
-	if err != nil {
-		log.Fatalf(err.Error())
-	}
-
-	err = dbService.CreateDBConnection(
-		os.Getenv("RBAC_DB_DRIVER"),
-		os.Getenv("RBAC_DB_USERNAME"),
-		os.Getenv("RBAC_DB_PASSWORD"),
-		os.Getenv("RBAC_DB_HOSTNAME"),
-		os.Getenv("RBAC_DB_NAME"),
-		os.Getenv("RBAC_DB_PORT"))
-
-	if err != nil {
-		log.Fatalf(err.Error())
-	}
-
-	userObject.DBService = dbService
-}
-
-func tearDownUserTest() {
-	err := userObject.DBService.CloseConnection()
-	if err != nil {
-		log.Fatalf(err.Error())
-	}
-}
 
 // Session test parameters
 var sessionObject SessionObject

@@ -1,13 +1,16 @@
 package RBAC
 
-import "github.com/flannel-dev-lab/RBAC/database"
+import (
+    "github.com/flannel-dev-lab/RBAC/database"
+    "github.com/flannel-dev-lab/RBAC/vars"
+)
 
 type SessionObject struct {
     DBService database.DatabaseService
 }
 
 // (RC-16) Core RBAC: Create a new session with a user as owner and an active role set
-func (sessionObject *SessionObject) CreateSession(userId int, name string) (database.Session, error) {
+func (sessionObject *SessionObject) CreateSession(userId int, name string) (vars.Session, error) {
     return sessionObject.DBService.CreateSession(userId, name)
 }
 

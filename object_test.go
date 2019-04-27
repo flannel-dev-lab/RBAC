@@ -1,18 +1,19 @@
 package RBAC
 
-import ( 
+import (
+    "github.com/flannel-dev-lab/RBAC/vars"
     "testing"
 )
 
-var TestObject = Object{Id: 2, Name: "test-fluid-object-name", Description: "Reserved object for fluid testing"}
+var TestObject = vars.Object{Id: 2, Name: "test-fluid-object-name", Description: "Reserved object for fluid testing"}
 
 
 func TestRoleOperationsOnObject(t *testing.T) {
     DbConnect("mysql", "asdf", "asdfaasdf", "awefawef", "rerg", 3306)
 
 
-    role := Role{Id: 1, Name: "test-name", Description: "Test Description"}
-    object := Object{Id: 1, Name: "test-object", Description: "Test Description"}
+    role := vars.Role{Id: 1, Name: "test-name", Description: "Test Description"}
+    object := vars.Object{Id: 1, Name: "test-object", Description: "Test Description"}
     _, err := RoleOperationsOnObject(role, object)
 
     if err != nil {
@@ -21,8 +22,8 @@ func TestRoleOperationsOnObject(t *testing.T) {
 }
 
 func TestUserOperationsOnObject(t *testing.T) {
-    user := User{Id: 1}
-    object := Object{Id: 1, Name: "objectName", Description: "Reserved object for testing"}
+    user := vars.User{Id: 1}
+    object := vars.Object{Id: 1, Name: "objectName", Description: "Reserved object for testing"}
     _, err := UserOperationsOnObject(user, object)
 
     if err != nil {

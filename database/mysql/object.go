@@ -1,9 +1,11 @@
 package mysql
 
-import "github.com/flannel-dev-lab/RBAC/database"
+import (
+	"github.com/flannel-dev-lab/RBAC/vars"
+)
 
 // Create an Object
-func (databaseService *DatabaseService) CreateObject(name, description string) (object database.Object, err error) {
+func (databaseService *DatabaseService) CreateObject(name, description string) (object vars.Object, err error) {
 	stmt, err := databaseService.Conn.Prepare("INSERT INTO `rbac_object` SET `name`= ?, description = ?")
 	if err != nil {
 		return object, err

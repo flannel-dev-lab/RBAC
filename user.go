@@ -2,6 +2,7 @@ package RBAC
 
 import (
 	"github.com/flannel-dev-lab/RBAC/database"
+	"github.com/flannel-dev-lab/RBAC/vars"
 )
 
 type UserObject struct {
@@ -9,7 +10,7 @@ type UserObject struct {
 }
 
 // (RC-04) Core RBAC: Creates a new RBAC user
-func (userObject *UserObject) AddUser(name string) (database.User, error) {
+func (userObject *UserObject) AddUser(name string) (vars.User, error) {
 	return userObject.DBService.AddUser(name)
 }
 
@@ -19,6 +20,6 @@ func (userObject *UserObject) DeleteUser(userId int) (bool, error) {
 }
 
 // (RC-09) Core RBAC: Returns a set of roles assigned to a given user
-func (userObject *UserObject) AssignedRoles(userId int) ([]database.Role, error) {
+func (userObject *UserObject) AssignedRoles(userId int) ([]vars.Role, error) {
 	return userObject.DBService.AssignedRoles(userId)
 }

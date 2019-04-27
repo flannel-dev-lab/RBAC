@@ -2,6 +2,7 @@ package RBAC
 
 import (
     "github.com/flannel-dev-lab/RBAC/database"
+    "github.com/flannel-dev-lab/RBAC/vars"
     "testing"
 )
 
@@ -42,9 +43,9 @@ func TestDeleteSession(t *testing.T) {
 }
 
 func TestAddActiveRole(t *testing.T) {
-    user := User{Id: 1}
-    session := Session{Id: 1, UserId: 1, Name: "123-123-123"}
-    role := Role{Id: 1, Name: "test-role", Description: "Reserved role for testing"}
+    user := vars.User{Id: 1}
+    session := vars.Session{Id: 1, UserId: 1, Name: "123-123-123"}
+    role := vars.Role{Id: 1, Name: "test-role", Description: "Reserved role for testing"}
 
     _, err := AddActiveRole(user, session, role.Id )
 
@@ -54,8 +55,8 @@ func TestAddActiveRole(t *testing.T) {
 }
 
 func TestDropActiveRole(t *testing.T) {
-    user := User{Id: 1}
-    session := Session{Id: 1, UserId: 1, Name: "123-123-123"}
+    user := vars.User{Id: 1}
+    session := vars.Session{Id: 1, UserId: 1, Name: "123-123-123"}
 
     _, err := DropActiveRole(user, session, "testRole")
 
@@ -65,9 +66,9 @@ func TestDropActiveRole(t *testing.T) {
 }
 
 func TestCheckAccess(t *testing.T) {
-    session := Session{Id: 1, UserId: 1, Name: "test-session"}
+    session := vars.Session{Id: 1, UserId: 1, Name: "test-session"}
     operation := Operation{Id: 1, Name: "testOperation", Description: "Reserved permission for test"}
-    object := Object{Id: 1, Name: "testObject", Description: "Reserved object for testing"}
+    object := vars.Object{Id: 1, Name: "testObject", Description: "Reserved object for testing"}
     
     _, err := CheckAccess(session, operation, object)
 
