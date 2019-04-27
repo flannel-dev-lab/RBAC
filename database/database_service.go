@@ -87,6 +87,16 @@ type DatabaseService interface {
 	// or not to perform a given operation on a given object
 	CheckAccess(sessionId, operationId, objectId int) (bool, error)
 
+	// (RC-36) Core RBAC: Return the set of active roles associated with a session
+	SessionRoles(sessionId int) ([]vars.Role, error)
+
+	// This function returns the set of operations a given role is permitted to perform on a given object
+	RoleOperationOnObject(roleId, objectId int) ([]vars.Operation, error)
+
+	// This function returns the set of operations a given user is permitted to perform on a given
+	// object, obtained either directly or through his/her assigned roles.
+	UserOperationOnObject(userId, objectId int) ([]vars.Operation, error)
+
 	// Closes a DB Connection
 	CloseConnection() error
 }

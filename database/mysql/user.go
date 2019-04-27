@@ -70,4 +70,29 @@ func (databaseService *DatabaseService) AssignedRoles(userId int) ([]vars.Role, 
 	return roles, nil
 }
 
+// This function returns the set of operations a given user is permitted to perform on a given
+// object, obtained either directly or through his/her assigned roles.
+func (databaseService *DatabaseService) UserOperationOnObject(userId, objectId int) ([]vars.Operation, error) {
+	stmt, err := databaseService.Conn.Prepare("select rp.rbac_operation_id from rbac_permission rp inner join rbac_role_permission rrp on rp.rbac_permission_id=rrp.rbac_permission_id inner join rbac_user_role rur on rrp.rbac_role_id=rur.rbac_role_id where rur.rbac_user_id=? and rp.rbac_object_id=?")
+	if err != nil {
+		return nil, err
+	}
+
+	result, err := stmt.Query(userId, objectId)
+	if err != nil {
+		return nil, err
+	}
+
+	var operations []vars.Operation
+	for result.Next() {
+		var operation vars.Operation
+		err = result.Scan(&operation.Id)
+		if err != nil {
+			return nil, err
+		}
+		operations = append(operations, operation)
+	}
+
+	return operations, nil
+}
 

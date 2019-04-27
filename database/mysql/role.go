@@ -76,9 +76,9 @@ func (databaseService *DatabaseService) DeassignUser(userId, roleId int) (bool, 
 
 // (RC-11) Core RBAC: Return the set of users assigned to a given role
 func (databaseService *DatabaseService) AssignedUsers(roleId int) ([]vars.User, error) {
-	stmt, prepErr := databaseService.Conn.Prepare("SELECT `rbac_user_id` FROM `rbac_user_role` WHERE `rbac_role_id` = ?")
-	if prepErr != nil {
-		return nil, prepErr
+	stmt, err := databaseService.Conn.Prepare("SELECT `rbac_user_id` FROM `rbac_user_role` WHERE `rbac_role_id` = ?")
+	if err != nil {
+		return nil, err
 	}
 
 	result, err := stmt.Query(roleId)
@@ -97,4 +97,54 @@ func (databaseService *DatabaseService) AssignedUsers(roleId int) ([]vars.User, 
 	}
 
 	return users, nil
+}
+
+// (RC-36) Core RBAC: Return the set of active roles associated with a session
+func (databaseService *DatabaseService) SessionRoles(sessionId int) ([]vars.Role, error) {
+	stmt, err := databaseService.Conn.Prepare("SELECT `rbac_role_id` FROM `rbac_session_role` WHERE `rbac_session_id` = ?")
+	if err != nil {
+		return nil, err
+	}
+
+	result, err := stmt.Query(sessionId)
+	if err != nil {
+		return nil, err
+	}
+
+	var roles []vars.Role
+	for result.Next() {
+		var role vars.Role
+		err = result.Scan(&role.Id)
+		if err != nil {
+			return nil, err
+		}
+		roles = append(roles, role)
+	}
+
+	return roles, nil
+}
+
+// This function returns the set of operations a given role is permitted to perform on a given object
+func (databaseService *DatabaseService) RoleOperationOnObject(roleId, objectId int) ([]vars.Operation, error) {
+	stmt, err := databaseService.Conn.Prepare("select rp.rbac_operation_id from rbac_permission rp inner join rbac_role_permission rrp on rp.rbac_permission_id=rrp.rbac_permission_id where rp.rbac_object_id=? and rrp.rbac_role_id=?")
+	if err != nil {
+		return nil, err
+	}
+
+	result, err := stmt.Query(objectId, roleId)
+	if err != nil {
+		return nil, err
+	}
+
+	var operations []vars.Operation
+	for result.Next() {
+		var operation vars.Operation
+		err = result.Scan(&operation.Id)
+		if err != nil {
+			return nil, err
+		}
+		operations = append(operations, operation)
+	}
+
+	return operations, nil
 }

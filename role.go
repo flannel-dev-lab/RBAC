@@ -43,9 +43,12 @@ func (roleObject * RoleObject) AssignedUsers(roleId int) ([]vars.User, error) {
 }
 
 // (RC-36) Core RBAC: Return the set of active roles associated with a session
-/*func SessionRoles(session Session) ([]Role, error) {
-    // Not implemented
-    roles := []Role{}
-    return roles, nil
+func (roleObject * RoleObject) SessionRoles(sessionId int) ([]vars.Role, error) {
+    return roleObject.DBService.SessionRoles(sessionId)
 }
-*/
+
+// This function returns the set of operations a given role is permitted to perform on a given object
+func (roleObject * RoleObject) RoleOperationOnObject(roleId, objectId int) ([]vars.Operation, error) {
+    return roleObject.DBService.RoleOperationOnObject(roleId, objectId)
+}
+
