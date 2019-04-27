@@ -88,6 +88,24 @@ CREATE TABLE `rbac_role_permission` (
       ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+CREATE TABLE `rbac_session_role` (
+    `rbac_session_role_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `rbac_role_id` int(11) unsigned NOT NULL,
+    `rbac_user_id` int(11) unsigned NOT NULL,
+    `rbac_session_id` int(11) unsigned NOT NULL,
+    PRIMARY KEY (`rbac_session_role_id`),
+    UNIQUE `UK_ROLE_ID_USER_ID_SESSION_ID` (`rbac_role_id`, `rbac_user_id`, `rbac_session_id`),
+    FOREIGN KEY `FK_RBAC_SESSION_ROLE_RBAC_ROLE_ID` (`rbac_role_id`)
+        REFERENCES `rbac_role` (`rbac_role_id`)
+        ON DELETE CASCADE,
+    FOREIGN KEY `FK_RBAC_SESSION_ROLE_RBAC_USER_ID` (`rbac_user_id`)
+        REFERENCES `rbac_user` (`rbac_user_id`)
+        ON DELETE CASCADE,
+    FOREIGN KEY `FK_RBAC_SESSION_ROLE_RBAC_SESSION_ID` (`rbac_session_id`)
+        REFERENCES `rbac_session` (`rbac_session_id`)
+        ON DELETE CASCADE
+
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `rbac_role_role` (
   `rbac_role_role_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -102,6 +120,3 @@ CREATE TABLE `rbac_role_role` (
       REFERENCES `rbac_role` (`rbac_role_id`)
       ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-
-

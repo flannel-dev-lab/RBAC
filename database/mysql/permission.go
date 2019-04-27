@@ -59,12 +59,12 @@ func (databaseService *DatabaseService) FindPermission(objectId int, operationId
 // (RC-32) Core RBAC: Revoke a permission from a role - must pair an object and an operation
 // Spec deviation - accepting roleId instead of roleName
 func (databaseService *DatabaseService) RevokePermission(permissionId, roleId int) (bool, error) {
-	stmt, stmtErr := databaseService.Conn.Prepare("DELETE FROM `rbac_role_permission` WHERE `rbac_role_id` = ? AND `rbac_permission_id` = ?")
-	if stmtErr != nil {
-		return false, stmtErr
+	stmt, err := databaseService.Conn.Prepare("DELETE FROM `rbac_role_permission` WHERE `rbac_role_id` = ? AND `rbac_permission_id` = ?")
+	if err != nil {
+		return false, err
 	}
 
-	_, err := stmt.Exec(roleId, permissionId)
+	_, err = stmt.Exec(roleId, permissionId)
 	if err != nil {
 		return false, err
 	}
@@ -74,9 +74,9 @@ func (databaseService *DatabaseService) RevokePermission(permissionId, roleId in
 
 // (RC-34) Core RBAC: Return the set of permissions granted to a given role
 func (databaseService *DatabaseService) RolePermissions(roleId int) ([]vars.Permission, error) {
-	stmt, prepErr := databaseService.Conn.Prepare("SELECT rp.rbac_permission_id, rp.rbac_object_id, rp.rbac_operation_id FROM rbac_role_permission rrp JOIN rbac_permission rp ON rrp.rbac_permission_id = rp.rbac_permission_id WHERE rrp.rbac_role_id = ?")
-	if prepErr != nil {
-		return nil, prepErr
+	stmt, err := databaseService.Conn.Prepare("SELECT rp.rbac_permission_id, rp.rbac_object_id, rp.rbac_operation_id FROM rbac_role_permission rrp JOIN rbac_permission rp ON rrp.rbac_permission_id = rp.rbac_permission_id WHERE rrp.rbac_role_id = ?")
+	if err != nil {
+		return nil, err
 	}
 
 	result, err := stmt.Query(roleId)

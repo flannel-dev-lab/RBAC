@@ -20,48 +20,17 @@ func (sessionObject *SessionObject) DeleteSession(userId int, sessionName string
 }
 
 // (RC-01) Core RBAC: Add a role as an active role of a session whose owner is a given user
-/*func AddActiveRole(user User, session Session, roleId int) (bool, error) {
-    // Not implemented currently
-    return true, nil
-}*/
+func (sessionObject *SessionObject) AddActiveRole(userId, sessionId, roleId int) (bool, error) {
+    return sessionObject.DBService.AddActiveRole(userId, sessionId, roleId)
+}
 
 // (RC-27) Core RBAC: Delete a role from the active role set of a session owned by a given user
-// TODO
-/*func DropActiveRole(user User, session Session, roleName string) (bool, error) {
-    // Not implemented currently
-    return true, nil
-}*/
+func (sessionObject *SessionObject) DropActiveRole(userId, sessionId, roleId int) (bool, error) {
+    return sessionObject.DBService.DropActiveRole(userId, sessionId, roleId)
+}
 
 // (RC-14) Core RBAC: Returns a boolean of whether the subject of a given session is allowed
 // or not to perform a given operation on a given object
-// TODO
-/*func CheckAccess(session Session, operation Operation, object Object) (bool, error) {
-    DbInit()
-
-    stmt, prepErr := DBRead.Prepare("SELECT rp.rbac_permission_id, rp.rbac_object_id, rp.rbac_operation_id FROM rbac_session rs JOIN rbac_user_role rur ON rs.rbac_user_id = rur.rbac_user_id JOIN rbac_role_permission rrp ON rur.rbac_role_id = rrp.rbac_role_id JOIN rbac_permission rp ON rrp.rbac_permission_id = rp.rbac_permission_id WHERE rs.name = ? AND rp.rbac_object_id = ? AND rp.rbac_operation_id = ?")
-    if prepErr != nil {
-        return false, prepErr
-    }
-
-    result, err := stmt.Query(session.Name, object.Id, operation.Id)
-    if err != nil {
-        return false, err
-    }
-
-    prms := []Permission{}
-    for result.Next() {
-        var perm Permission
-        err = result.Scan(&perm.Id, &perm.ObjectId, &perm.OperationId)
-        if err != nil {
-            return false, err
-        }
-        prms = append(prms, perm)
-    }
-
-    if len(prms) > 0 {
-        return true, nil
-    }
-    
-    return false, nil
+func (sessionObject *SessionObject) CheckAccess(sessionId, operationId, objectId int) (bool, error) {
+    return sessionObject.DBService.CheckAccess(sessionId, operationId, objectId)
 }
-*/

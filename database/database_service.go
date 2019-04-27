@@ -77,6 +77,16 @@ type DatabaseService interface {
 	// (RC-35) Core RBAC: Return the set of permissions assigned to a given session
 	SessionPermissions(sessionId int) ([]vars.Permission, error)
 
+	// (RC-01) Core RBAC: Add a role as an active role of a session whose owner is a given user
+	AddActiveRole(userId, sessionId, roleId int) (bool, error)
+
+	// (RC-27) Core RBAC: Delete a role from the active role set of a session owned by a given user
+	DropActiveRole(userId, sessionId, roleId int) (bool, error)
+
+	// (RC-14) Core RBAC: Returns a boolean of whether the subject of a given session is allowed
+	// or not to perform a given operation on a given object
+	CheckAccess(sessionId, operationId, objectId int) (bool, error)
+
 	// Closes a DB Connection
 	CloseConnection() error
 }
