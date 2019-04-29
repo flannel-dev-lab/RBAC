@@ -1,6 +1,9 @@
 package mysql
 
-import "github.com/flannel-dev-lab/RBAC/vars"
+import (
+	"github.com/flannel-dev-lab/RBAC/vars"
+	_ "github.com/go-sql-driver/mysql"
+)
 
 // Creates a new Permission
 func (databaseService *DatabaseService) CreatePermission(objectId, operationId int) (permission vars.Permission, err error) {

@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"github.com/flannel-dev-lab/RBAC/vars"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // (RC-16) Core RBAC: Create a new session with a user as owner and an active role set

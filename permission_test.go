@@ -1,6 +1,6 @@
 package RBAC
 
-import (
+/*import (
 	"github.com/flannel-dev-lab/RBAC/vars"
 	"testing"
 )
@@ -86,3 +86,4 @@ func TestSessionPermissions(t *testing.T) {
         t.Errorf("%v", err)
     }
 }
+*/

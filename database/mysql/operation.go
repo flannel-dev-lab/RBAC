@@ -1,6 +1,9 @@
 package mysql
 
-import "github.com/flannel-dev-lab/RBAC/vars"
+import (
+	"github.com/flannel-dev-lab/RBAC/vars"
+	_ "github.com/go-sql-driver/mysql"
+)
 
 func (databaseService *DatabaseService) AddOperation(name, description string) (operation vars.Operation, err error) {
 	stmt, err := databaseService.Conn.Prepare("INSERT INTO `rbac_operation` SET `name`= ?, description = ?")

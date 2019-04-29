@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"github.com/flannel-dev-lab/RBAC/vars"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // Create an Object

@@ -41,14 +41,14 @@ func tearDownUserTest() {
 func TestAddUser(t *testing.T) {
 	// Add user - what we are actually testing
 	setupUserTest()
-	user, err := userObject.AddUser("test-user")
+	_, err := userObject.AddUser("test-user")
 	if err != nil {
 		t.Errorf("%v", err)
 	}
 
 	// Cleanup
-	_, err = userObject.DeleteUser(user.Id)
-	tearDownUserTest()
+	//_, err = userObject.DeleteUser(user.Id)
+	//tearDownUserTest()
 }
 
 func TestDeleteUser(t *testing.T) {

@@ -1,33 +1,40 @@
 package RBAC
 
 import (
-    "github.com/flannel-dev-lab/RBAC/vars"
+    "github.com/flannel-dev-lab/RBAC/database"
+    "log"
+    "os"
     "testing"
 )
 
-var TestObject = vars.Object{Id: 2, Name: "test-fluid-object-name", Description: "Reserved object for fluid testing"}
+// RBAC Object test parameters
+var rbacObject RBACObject
 
+func setupRBACObjectTest() {
+    dbService, err := database.CreateDatabaseObject("mysql")
+    if err != nil {
+        log.Fatalf(err.Error())
+    }
 
-func TestRoleOperationsOnObject(t *testing.T) {
-    DbConnect("mysql", "asdf", "asdfaasdf", "awefawef", "rerg", 3306)
-
-
-    role := vars.Role{Id: 1, Name: "test-name", Description: "Test Description"}
-    object := vars.Object{Id: 1, Name: "test-object", Description: "Test Description"}
-    _, err := RoleOperationsOnObject(role, object)
+    err = dbService.CreateDBConnection(
+        os.Getenv("RBAC_DB_DRIVER"),
+        os.Getenv("RBAC_DB_USERNAME"),
+        os.Getenv("RBAC_DB_PASSWORD"),
+        os.Getenv("RBAC_DB_HOSTNAME"),
+        os.Getenv("RBAC_DB_NAME"),
+        os.Getenv("RBAC_DB_PORT"))
 
     if err != nil {
-        t.Errorf("%v", err)
+        log.Fatalf(err.Error())
     }
+
+    rbacObject.DBService = dbService
 }
 
-func TestUserOperationsOnObject(t *testing.T) {
-    user := vars.User{Id: 1}
-    object := vars.Object{Id: 1, Name: "objectName", Description: "Reserved object for testing"}
-    _, err := UserOperationsOnObject(user, object)
-
+func tearDownRBACObjectTest() {
+    err := rbacObject.DBService.CloseConnection()
     if err != nil {
-        t.Errorf("%v", err)
+        log.Fatalf(err.Error())
     }
 }
 

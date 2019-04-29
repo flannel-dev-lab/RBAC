@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"github.com/flannel-dev-lab/RBAC/vars"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // (RC-06) Core RBAC: Creates a new role if not exists. Duplicate roles are not allowed

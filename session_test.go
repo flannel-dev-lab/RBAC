@@ -1,5 +1,5 @@
 package RBAC
-
+/*
 import (
     "github.com/flannel-dev-lab/RBAC/database"
     "github.com/flannel-dev-lab/RBAC/vars"
@@ -76,3 +76,4 @@ func TestCheckAccess(t *testing.T) {
         t.Errorf("%v", err)
     }
 }
+*/
