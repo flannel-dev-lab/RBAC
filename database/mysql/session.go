@@ -30,13 +30,13 @@ func (databaseService *DatabaseService) CreateSession(userId int, name string) (
 }
 
 // (RC-23) Core RBAC: Delete a given session with a given owner user
-func (databaseService *DatabaseService) DeleteSession(userId int, sessionName string) (bool, error) {
+func (databaseService *DatabaseService) DeleteSession(userId, sessionId int) (bool, error) {
 	stmt, stmtErr := databaseService.Conn.Prepare("DELETE FROM `rbac_session` WHERE `rbac_user_id`= ? AND `name` = ?")
 	if stmtErr != nil {
 		return false, stmtErr
 	}
 
-	_, err := stmt.Exec(userId, sessionName)
+	_, err := stmt.Exec(userId, sessionId)
 	if err != nil {
 		return false, err
 	}

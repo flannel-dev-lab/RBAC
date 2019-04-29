@@ -7,10 +7,8 @@ import (
 	"testing"
 )
 
-// RBAC Object test parameters
-var operationObject OperationObject
 
-func setupOperationObjectTest() {
+func setupOperationObjectTest(operationObject *OperationObject) {
 	dbService, err := database.CreateDatabaseObject("mysql")
 	if err != nil {
 		log.Fatalf(err.Error())
@@ -31,7 +29,7 @@ func setupOperationObjectTest() {
 	operationObject.DBService = dbService
 }
 
-func tearDownOperationObjectTest() {
+func tearDownOperationObjectTest(operationObject *OperationObject) {
 	err := operationObject.DBService.CloseConnection()
 	if err != nil {
 		log.Fatalf(err.Error())
@@ -39,7 +37,8 @@ func tearDownOperationObjectTest() {
 }
 
 func TestAddOperation(t *testing.T) {
-	setupOperationObjectTest()
+	var operationObject OperationObject
+	setupOperationObjectTest(&operationObject)
 	object, err := operationObject.AddOperation("test-operation", "test-operation-description")
 
 	if err != nil {
@@ -48,11 +47,12 @@ func TestAddOperation(t *testing.T) {
 
 	// Cleanup
 	_, err = operationObject.DeleteOperation(object.Id)
-	tearDownOperationObjectTest()
+	tearDownOperationObjectTest(&operationObject)
 }
 
 func TestDeleteOperation(t *testing.T) {
-	setupOperationObjectTest()
+	var operationObject OperationObject
+	setupOperationObjectTest(&operationObject)
 	object, err := operationObject.AddOperation("test-operation", "test-operation-description")
 
 	if err != nil {
@@ -61,6 +61,6 @@ func TestDeleteOperation(t *testing.T) {
 
 	// Cleanup
 	_, err = operationObject.DeleteOperation(object.Id)
-	tearDownOperationObjectTest()
+	tearDownOperationObjectTest(&operationObject)
 }
 

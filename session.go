@@ -15,8 +15,8 @@ func (sessionObject *SessionObject) CreateSession(userId int, name string) (vars
 }
 
 // (RC-23) Core RBAC: Delete a given session with a given owner user
-func (sessionObject *SessionObject) DeleteSession(userId int, sessionName string) (bool, error) {
-    return sessionObject.DBService.DeleteSession(userId, sessionName)
+func (sessionObject *SessionObject) DeleteSession(userId, sessionId int) (bool, error) {
+    return sessionObject.DBService.DeleteSession(userId, sessionId)
 }
 
 // (RC-01) Core RBAC: Add a role as an active role of a session whose owner is a given user

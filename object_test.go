@@ -7,10 +7,8 @@ import (
     "testing"
 )
 
-// RBAC Object test parameters
-var rbacObject RBACObject
 
-func setupRBACObjectTest() {
+func setupRBACObjectTest(rbacObject *RBACObject) {
     dbService, err := database.CreateDatabaseObject("mysql")
     if err != nil {
         log.Fatalf(err.Error())
@@ -31,7 +29,7 @@ func setupRBACObjectTest() {
     rbacObject.DBService = dbService
 }
 
-func tearDownRBACObjectTest() {
+func tearDownRBACObjectTest(rbacObject *RBACObject) {
     err := rbacObject.DBService.CloseConnection()
     if err != nil {
         log.Fatalf(err.Error())
@@ -39,7 +37,9 @@ func tearDownRBACObjectTest() {
 }
 
 func TestCreateObject(t *testing.T) {
-    setupRBACObjectTest()
+    var rbacObject RBACObject
+
+    setupRBACObjectTest(&rbacObject)
     object, err := rbacObject.CreateObject("test-object", "test-object-description")
 
     if err != nil {
@@ -48,11 +48,12 @@ func TestCreateObject(t *testing.T) {
 
     // Cleanup
     _, err = rbacObject.RemoveObject(object.Id)
-    tearDownRBACObjectTest()
+    tearDownRBACObjectTest(&rbacObject)
 }
 
 func TestRemoveObject(t *testing.T) {
-    setupRBACObjectTest()
+    var rbacObject RBACObject
+    setupRBACObjectTest(&rbacObject)
     // Create an object to remove
     object, err := rbacObject.CreateObject("test-object", "test-object-description")
 
@@ -66,6 +67,6 @@ func TestRemoveObject(t *testing.T) {
     if err != nil {
         t.Errorf("%v", err)
     }
-    tearDownRBACObjectTest()
+    tearDownRBACObjectTest(&rbacObject)
 }
 

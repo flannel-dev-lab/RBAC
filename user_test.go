@@ -8,9 +8,9 @@ import (
 	"testing"
 )
 
-var userObject UserObject
 
-func setupUserTest() {
+
+func setupUserTest(userObject *UserObject) {
 	dbService, err := database.CreateDatabaseObject("mysql")
 	if err != nil {
 		log.Fatalf(err.Error())
@@ -31,7 +31,7 @@ func setupUserTest() {
 	userObject.DBService = dbService
 }
 
-func tearDownUserTest() {
+func tearDownUserTest(userObject *UserObject) {
 	err := userObject.DBService.CloseConnection()
 	if err != nil {
 		log.Fatalf(err.Error())
@@ -40,20 +40,8 @@ func tearDownUserTest() {
 
 func TestAddUser(t *testing.T) {
 	// Add user - what we are actually testing
-	setupUserTest()
-	_, err := userObject.AddUser("test-user")
-	if err != nil {
-		t.Errorf("%v", err)
-	}
-
-	// Cleanup
-	//_, err = userObject.DeleteUser(user.Id)
-	//tearDownUserTest()
-}
-
-func TestDeleteUser(t *testing.T) {
-	// Add user - what we are actually testing
-	setupUserTest()
+	var userObject UserObject
+	setupUserTest(&userObject)
 	user, err := userObject.AddUser("test-user")
 	if err != nil {
 		t.Errorf("%v", err)
@@ -61,11 +49,26 @@ func TestDeleteUser(t *testing.T) {
 
 	// Cleanup
 	_, err = userObject.DeleteUser(user.Id)
-	tearDownUserTest()
+	tearDownUserTest(&userObject)
+}
+
+func TestDeleteUser(t *testing.T) {
+	// Add user - what we are actually testing
+	var userObject UserObject
+	setupUserTest(&userObject)
+	user, err := userObject.AddUser("test-user")
+	if err != nil {
+		t.Errorf("%v", err)
+	}
+
+	// Cleanup
+	_, err = userObject.DeleteUser(user.Id)
+	tearDownUserTest(&userObject)
 }
 
 func TestAssignedRoles(t *testing.T) {
-	setupUserTest()
+	var userObject UserObject
+	setupUserTest(&userObject)
 	user := vars.User{Id: 1}
 
 	_, err := userObject.AssignedRoles(user.Id)
@@ -73,5 +76,5 @@ func TestAssignedRoles(t *testing.T) {
 	if err != nil {
 		t.Errorf("%v", err)
 	}
-	tearDownUserTest()
+	tearDownUserTest(&userObject)
 }

@@ -34,7 +34,7 @@ type DatabaseService interface {
 	CreateSession(userId int, name string) (vars.Session, error)
 
 	// (RC-23) Core RBAC: Delete a given session with a given owner user
-	DeleteSession(userId int, sessionName string) (bool, error)
+	DeleteSession(userId, sessionId int) (bool, error)
 
 	// (RC-11) Core RBAC: Return the set of users assigned to a given role
 	AssignedUsers(roleId int) ([]vars.User, error)
