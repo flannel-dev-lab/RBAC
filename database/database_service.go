@@ -9,7 +9,7 @@ import (
 // DatabaseService Interface to expose DB Methods
 type DatabaseService interface {
 	// Creates a DB Connection
-	CreateDBConnection(driver, username, password, hostname, databaseName, port string) error
+	CreateDBConnection(driver, username, password, hostname, databaseName string) error
 
 	// (RC-04) Core RBAC: Creates a new RBAC user.  The User will not carry any sessions during the creation
 	AddUser(name string) (vars.User, error)

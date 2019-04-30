@@ -12,7 +12,7 @@ type DatabaseService struct {
 }
 
 // CreateDBConnection Creates a DB Connection with the Database
-func (databaseService *DatabaseService) CreateDBConnection(driver, username, password, hostname, databaseName, port string) error {
+func (databaseService *DatabaseService) CreateDBConnection(driver, username, password, hostname, databaseName string) error {
 	dbConnection, err := sql.Open(
 		driver,
 		fmt.Sprintf("%s:%s@tcp(%s)/%s",
