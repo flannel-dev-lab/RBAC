@@ -1,54 +1,72 @@
-package RBAC
+package rbac
 
-import ( 
+import (
+    "github.com/flannel-dev-lab/RBAC/database"
+    "log"
+    "os"
     "testing"
 )
 
-var TestObject = Object{Id: 2, Name: "test-fluid-object-name", Description: "Reserved object for fluid testing"}
 
+func setupRBACObjectTest(rbacObject *RBACObject) {
+    dbService, err := database.CreateDatabaseObject("mysql")
+    if err != nil {
+        log.Fatalf(err.Error())
+    }
 
-func TestRoleOperationsOnObject(t *testing.T) {
-    DbConnect("mysql", "asdf", "asdfaasdf", "awefawef", "rerg", 3306)
-
-
-    role := Role{Id: 1, Name: "test-name", Description: "Test Description"}
-    object := Object{Id: 1, Name: "test-object", Description: "Test Description"}
-    _, err := RoleOperationsOnObject(role, object)
+    err = dbService.CreateDBConnection(
+        os.Getenv("RBAC_DB_DRIVER"),
+        os.Getenv("RBAC_DB_USERNAME"),
+        os.Getenv("RBAC_DB_PASSWORD"),
+        os.Getenv("RBAC_DB_HOSTNAME"),
+        os.Getenv("RBAC_DB_NAME"),
+        os.Getenv("RBAC_DB_PORT"))
 
     if err != nil {
-        t.Errorf("%v", err)
+        log.Fatalf(err.Error())
     }
+
+    rbacObject.DBService = dbService
 }
 
-func TestUserOperationsOnObject(t *testing.T) {
-    user := User{Id: 1}
-    object := Object{Id: 1, Name: "objectName", Description: "Reserved object for testing"}
-    _, err := UserOperationsOnObject(user, object)
-
+func tearDownRBACObjectTest(rbacObject *RBACObject) {
+    err := rbacObject.DBService.CloseConnection()
     if err != nil {
-        t.Errorf("%v", err)
+        log.Fatalf(err.Error())
     }
 }
 
 func TestCreateObject(t *testing.T) {
-    object, err := CreateObject("test-object", "test-object-description")
+    var rbacObject RBACObject
+
+    setupRBACObjectTest(&rbacObject)
+    object, err := rbacObject.CreateObject("test-object", "test-object-description")
 
     if err != nil {
         t.Errorf("%v", err)
     }
 
     // Cleanup
-    _, err = RemoveObject(object)
+    _, err = rbacObject.RemoveObject(object.Id)
+    tearDownRBACObjectTest(&rbacObject)
 }
 
 func TestRemoveObject(t *testing.T) {
+    var rbacObject RBACObject
+    setupRBACObjectTest(&rbacObject)
     // Create an object to remove
-    object, err := CreateObject("test-object", "test-object-description")
-
-    // Remove the object
-    _, err = RemoveObject(object)
+    object, err := rbacObject.CreateObject("test-object", "test-object-description")
 
     if err != nil {
         t.Errorf("%v", err)
     }
+
+    // Remove the object
+    _, err = rbacObject.RemoveObject(object.Id)
+
+    if err != nil {
+        t.Errorf("%v", err)
+    }
+    tearDownRBACObjectTest(&rbacObject)
 }
+

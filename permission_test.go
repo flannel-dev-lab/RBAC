@@ -1,87 +1,171 @@
-package RBAC
+package rbac
 
 import (
-    "testing"
+	"fmt"
+	"github.com/flannel-dev-lab/RBAC/database"
+	"log"
+	"os"
+	"testing"
 )
 
 
+func setupPermissionObjectTest(permissionObject *PermissionObject, rbacObject *RBACObject, operationObject *OperationObject, roleObject *RoleObject, userObject *UserObject, sessionObject *SessionObject) {
+	dbService, err := database.CreateDatabaseObject("mysql")
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+
+	err = dbService.CreateDBConnection(
+		os.Getenv("RBAC_DB_DRIVER"),
+		os.Getenv("RBAC_DB_USERNAME"),
+		os.Getenv("RBAC_DB_PASSWORD"),
+		os.Getenv("RBAC_DB_HOSTNAME"),
+		os.Getenv("RBAC_DB_NAME"),
+		os.Getenv("RBAC_DB_PORT"))
+
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+
+	permissionObject.DBService = dbService
+	rbacObject.DBService = dbService
+	operationObject.DBService = dbService
+	roleObject.DBService = dbService
+	userObject.DBService = dbService
+	sessionObject.DBService = dbService
+}
+
+func tearDownPermissionObjectTest(permissionObject *PermissionObject, rbacObject *RBACObject, operationObject *OperationObject, roleObject *RoleObject, userObject *UserObject, sessionObject *SessionObject) {
+	err := permissionObject.DBService.CloseConnection()
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+
+	err = rbacObject.DBService.CloseConnection()
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+
+	err = operationObject.DBService.CloseConnection()
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+
+	err = roleObject.DBService.CloseConnection()
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+
+	err = userObject.DBService.CloseConnection()
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+
+	err = sessionObject.DBService.CloseConnection()
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+}
+
+
 func TestGrantPermission(t *testing.T) {
-    // Create an object
-    object, err := CreateObject("test-object", "test-object-description")
+	var permissionObject PermissionObject
+	var rbacObject RBACObject
+	var operationObject OperationObject
+	var roleObject RoleObject
+	var userObject UserObject
+	var sessionObject SessionObject
 
-    _, err = GrantPermission(object, TestOperation, 1)
+	setupPermissionObjectTest(&permissionObject, &rbacObject, &operationObject, &roleObject, &userObject, &sessionObject)
 
-    if err != nil {
-        t.Errorf("%v", err)
-    }
+	object, err := rbacObject.CreateObject("test-object-1", "test-object-description")
+	if err != nil {
+		t.Errorf(err.Error())
+	}
 
-    // Cleanup
-    _, err = RemoveObject(object)
-    if err != nil {
-        t.Errorf("%v", err)
-    }
-}
+	operation, err := operationObject.AddOperation("test-operation-1", "test-operation-description")
+	if err != nil {
+		t.Errorf(err.Error())
+	}
 
-func TestRevokePermission(t *testing.T) {
-    // Create an object
-    object, err := CreateObject("test-object", "test-object-description")
-    if err != nil {
-        t.Errorf("%v", err)
-    }
-    
-    // Grant a permission
-    _, err = GrantPermission(object, TestOperation, 1)
-    if err != nil {
-        t.Errorf("%v", err)
-    }
+	_, err = permissionObject.CreatePermission(object.Id, operation.Id)
+	if err != nil {
+		t.Errorf(err.Error())
+	}
 
-    // This is what we are actually testing for
-    _, err = RevokePermission(object, TestOperation, 1)
-    if err != nil {
-        t.Errorf("%v", err)
-    }
+	findPermission, err := permissionObject.FindPermission(object.Id, operation.Id)
+	if err != nil {
+		t.Errorf(err.Error())
+	}
 
-    // Cleanup
-    _, err = RemoveObject(object)
-    if err != nil {
-        t.Errorf("%v", err)
-    }
-}
+	fmt.Println("FindPermission: ", findPermission)
 
-func TestRolePermissions(t *testing.T) {
-    role := Role{Id: 1, Name: "test-role", Description: "Reserved role for testing"}
-    _, err := RolePermissions(role)
+	role, err := roleObject.AddRole("test-role", "test-role-description")
+	if err != nil {
+		t.Errorf(err.Error())
+	}
 
-    if err != nil {
-        t.Errorf("%v", err)
-    }
-}
 
-func TestUserPermissions(t *testing.T) {
-    user := User{Id: 1}
+	rolePermission, err := permissionObject.RolePermissions(role.Id)
+	if err != nil {
+		t.Errorf(err.Error())
+	}
 
-    _, err := UserPermissions(user)
+	fmt.Println("RolePermission: ", rolePermission)
 
-    if err != nil {
-        t.Errorf("%v", err)
-    }
-}
+	user, err := userObject.AddUser("test-user")
+	if err != nil {
+		t.Errorf(err.Error())
+	}
 
-func TestSessionPermissions(t *testing.T) {
-    user := User{Id: 1}
-    session, sessionErr := CreateSession(user.Id, "123-123-123")
-    if sessionErr != nil {
-        t.Errorf("%v", sessionErr)
-    }
+	userPermission, err := permissionObject.UserPermissions(user.Id)
+	if err != nil {
+		t.Errorf(err.Error())
+	}
 
-    // Permissions - what we are actually testing
-    _, err := SessionPermissions(session)
-    if err != nil {
-        t.Errorf("%v", err)
-    }
+	fmt.Println("UserPermission: ", userPermission)
 
-    _, err = DeleteSession(user, session.Name)
-    if err != nil {
-        t.Errorf("%v", err)
-    }
+	session, err := sessionObject.CreateSession(user.Id, "test-session")
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+
+	sessionPermission, err := permissionObject.SessionPermissions(session.Id)
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+
+	fmt.Println("SessionPermission: ", sessionPermission)
+
+	_, err = permissionObject.GrantPermission(object.Id, operation.Id, role.Id)
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+
+	_, err = rbacObject.RemoveObject(object.Id)
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+
+	_, err = operationObject.DeleteOperation(operation.Id)
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+
+	_, err = roleObject.DeleteRole(role.Id)
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+
+	_, err = userObject.DeleteUser(user.Id)
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+
+	_, err = sessionObject.DeleteSession(user.Id, session.Id)
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+
+	tearDownPermissionObjectTest(&permissionObject, &rbacObject, &operationObject, &roleObject, &userObject, &sessionObject)
 }

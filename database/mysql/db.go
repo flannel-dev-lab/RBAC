@@ -1,37 +1,34 @@
 package mysql
 
 import (
-    "database/sql"
-    "fmt"
-    _ "github.com/go-sql-driver/mysql"
+	"database/sql"
+	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 )
 
-type DBService struct {
-    Conn *sql.DB
+type DatabaseService struct {
+	Conn *sql.DB
 }
 
-const (
+// Creates a DB Connection with the Database
+func (databaseService *DatabaseService) CreateDBConnection(driver, username, password, hostname, databaseName, port string) error {
+	dbConnection, err := sql.Open(
+		driver,
+		fmt.Sprintf("%s:%s@tcp(%s)/%s",
+			username,
+			password,
+			hostname,
+			databaseName,
+		))
 
-)
-
-// Creates a DB Connection with the FMD Database
-func (DBService *DBService) CreateDBConnection(driver, username, password, hostname, databaseName, port string) error {
-    dbConnection, err := sql.Open(
-        driver,
-        fmt.Sprintf("%s:%s@tcp(%s)/%s",
-            username,
-            password,
-            hostname,
-            databaseName,
-        ))
-
-    if err != nil {
-        return err
-    }
-    DBService.Conn = dbConnection
-    return nil
+	if err != nil {
+		return err
+	}
+	databaseService.Conn = dbConnection
+	return nil
 }
 
-func (DBService *DBService) CloseConnection() error {
-    return DBService.Conn.Close()
+// Closes the DB Connection
+func (databaseService *DatabaseService) CloseConnection() error {
+	return databaseService.Conn.Close()
 }
