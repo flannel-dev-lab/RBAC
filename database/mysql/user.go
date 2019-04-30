@@ -2,7 +2,7 @@ package mysql
 
 import (
 	"github.com/flannel-dev-lab/RBAC/vars"
-	_ "github.com/go-sql-driver/mysql"	// Importing mysql Driver
+	_ "github.com/go-sql-driver/mysql" // Importing mysql Driver
 )
 
 // AddUser (RC-04) Core RBAC: Creates a new RBAC user.  The User will not carry any sessions during the creation

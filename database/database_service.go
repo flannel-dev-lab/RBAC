@@ -5,6 +5,7 @@ import (
 	"github.com/flannel-dev-lab/RBAC/database/mysql"
 	"github.com/flannel-dev-lab/RBAC/vars"
 )
+
 // DatabaseService Interface to expose DB Methods
 type DatabaseService interface {
 	// Creates a DB Connection

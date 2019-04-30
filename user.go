@@ -4,6 +4,7 @@ import (
 	"github.com/flannel-dev-lab/RBAC/database"
 	"github.com/flannel-dev-lab/RBAC/vars"
 )
+
 // UserObject Interface to expose user operations
 type UserObject struct {
 	DBService database.DatabaseService
