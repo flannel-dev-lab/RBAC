@@ -2,7 +2,7 @@ package mysql
 
 import (
 	"github.com/flannel-dev-lab/RBAC/vars"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql" // Importing mysql Driver
 )
 
 // AddOperation Adds a new operation

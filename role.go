@@ -1,4 +1,4 @@
-// Copyright 2019 Flannel Development Laboratory. All rights reserved.
+// Package rbac Copyright 2019 Flannel Development Laboratory. All rights reserved.
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file.
 
