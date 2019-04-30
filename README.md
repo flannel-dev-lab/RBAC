@@ -1,3 +1,4 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/flannel-dev-lab/RBAC)](https://goreportcard.com/report/github.com/flannel-dev-lab/RBAC)
 # RBAC
 Golang implementation of INCITS 359-2012 (R2017)
 
