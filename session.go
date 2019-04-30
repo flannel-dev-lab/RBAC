@@ -5,7 +5,7 @@ import (
 	"github.com/flannel-dev-lab/RBAC/vars"
 )
 
-// Manages the sessions
+// SessionObject Manages the sessions
 type SessionObject struct {
 	DBService database.DatabaseService
 }

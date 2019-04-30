@@ -2,10 +2,10 @@ package mysql
 
 import (
 	"github.com/flannel-dev-lab/RBAC/vars"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql" // Importing mysql Driver
 )
 
-// Create an Object
+// CreateObject Create an Object
 func (databaseService *DatabaseService) CreateObject(name, description string) (object vars.Object, err error) {
 	stmt, err := databaseService.Conn.Prepare("INSERT INTO `rbac_object` SET `name`= ?, description = ?")
 	if err != nil {
@@ -29,7 +29,7 @@ func (databaseService *DatabaseService) CreateObject(name, description string) (
 	return object, nil
 }
 
-// Removes an Object
+// RemoveObject Removes an Object
 func (databaseService *DatabaseService) RemoveObject(objectId int) (bool, error) {
 	stmt, prepErr := databaseService.Conn.Prepare("DELETE FROM `rbac_object` WHERE `rbac_object_id` = ?")
 	if prepErr != nil {

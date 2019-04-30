@@ -13,41 +13,42 @@ import (
 	"github.com/flannel-dev-lab/RBAC/vars"
 )
 
+// RoleObject Exposes permission methods
 type RoleObject struct {
 	DBService database.DatabaseService
 }
 
-// (RC-06) Core RBAC: Creates a new role
+// AddRole (RC-06) Core RBAC: Creates a new role
 func (roleObject *RoleObject) AddRole(name, description string) (vars.Role, error) {
 	return roleObject.DBService.AddRole(name, description)
 }
 
-// (RC-22) Core RBAC: Deletes an existing role and deletes the role session
+// DeleteRole (RC-22) Core RBAC: Deletes an existing role and deletes the role session
 func (roleObject *RoleObject) DeleteRole(roleId int) (bool, error) {
 	return roleObject.DBService.DeleteRole(roleId)
 }
 
-// (RC-10) Core RBAC: Assigns a user to a role
+// AssignUser (RC-10) Core RBAC: Assigns a user to a role
 func (roleObject *RoleObject) AssignUser(userId int, roleId int) (bool, error) {
 	return roleObject.DBService.AssignUser(userId, roleId)
 }
 
-// (RC-18) Core RBAC: Remove a user from a role and deletes session
+// DeassignUser (RC-18) Core RBAC: Remove a user from a role and deletes session
 func (roleObject *RoleObject) DeassignUser(userId int, roleId int) (bool, error) {
 	return roleObject.DBService.DeassignUser(userId, roleId)
 }
 
-// (RC-11) Core RBAC: Return the set of users assigned to a given role
+// AssignedUsers (RC-11) Core RBAC: Return the set of users assigned to a given role
 func (roleObject *RoleObject) AssignedUsers(roleId int) ([]vars.User, error) {
 	return roleObject.DBService.AssignedUsers(roleId)
 }
 
-// (RC-36) Core RBAC: Return the set of active roles associated with a session
+// SessionRoles (RC-36) Core RBAC: Return the set of active roles associated with a session
 func (roleObject *RoleObject) SessionRoles(sessionId int) ([]vars.Role, error) {
 	return roleObject.DBService.SessionRoles(sessionId)
 }
 
-// This function returns the set of operations a given role is permitted to perform on a given object
+// RoleOperationOnObject This function returns the set of operations a given role is permitted to perform on a given object
 func (roleObject *RoleObject) RoleOperationOnObject(roleId, objectId int) ([]vars.Operation, error) {
 	return roleObject.DBService.RoleOperationOnObject(roleId, objectId)
 }

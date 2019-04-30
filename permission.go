@@ -6,21 +6,22 @@ import (
 	"github.com/flannel-dev-lab/RBAC/vars"
 )
 
+// PermissionObject Exposes permission methods
 type PermissionObject struct {
 	DBService database.DatabaseService
 }
 
-// Create a new permission record
+// CreatePermission Create a new permission record
 func (permissionObject *PermissionObject) CreatePermission(objectId, operationId int) (vars.Permission, error) {
 	return permissionObject.DBService.CreatePermission(objectId, operationId)
 }
 
-// Search for existing permission record
+// FindPermission Search for existing permission record
 func (permissionObject *PermissionObject) FindPermission(objectId int, operationId int) (vars.Permission, error) {
 	return permissionObject.DBService.FindPermission(objectId, operationId)
 }
 
-// (RC-31) Core RBAC: Grant a role a permission - must pair an object and an operation
+// GrantPermission (RC-31) Core RBAC: Grant a role a permission - must pair an object and an operation
 // Grants a role the permission to perform an operation on an object
 func (permissionObject *PermissionObject) GrantPermission(objectId, operationId, roleId int) (bool, error) {
 
@@ -43,7 +44,7 @@ func (permissionObject *PermissionObject) GrantPermission(objectId, operationId,
 	return permissionObject.DBService.GrantPermission(permission.Id, roleId)
 }
 
-// (RC-32) Core RBAC: Revoke a permission from a role - must pair an object and an operation
+// RevokePermission (RC-32) Core RBAC: Revoke a permission from a role - must pair an object and an operation
 // Spec deviation - accepting roleId instead of roleName
 func (permissionObject *PermissionObject) RevokePermission(objectId, operationId, roleId int) (bool, error) {
 	// Find a corresponding permission
@@ -54,17 +55,17 @@ func (permissionObject *PermissionObject) RevokePermission(objectId, operationId
 	return permissionObject.DBService.RevokePermission(permission.Id, roleId)
 }
 
-// (RC-34) Core RBAC: Return the set of permissions granted to a given role
+// RolePermissions (RC-34) Core RBAC: Return the set of permissions granted to a given role
 func (permissionObject *PermissionObject) RolePermissions(roleId int) ([]vars.Permission, error) {
 	return permissionObject.DBService.RolePermissions(roleId)
 }
 
-// (RC-43) Core RBAC: Return the set of permissions granted to a given user
+// UserPermissions (RC-43) Core RBAC: Return the set of permissions granted to a given user
 func (permissionObject *PermissionObject) UserPermissions(userId int) ([]vars.Permission, error) {
 	return permissionObject.DBService.UserPermissions(userId)
 }
 
-// (RC-35) Core RBAC: Return the set of permissions assigned to a given session
+// SessionPermissions (RC-35) Core RBAC: Return the set of permissions assigned to a given session
 func (permissionObject *PermissionObject) SessionPermissions(sessionId int) ([]vars.Permission, error) {
 	return permissionObject.DBService.SessionPermissions(sessionId)
 }

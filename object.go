@@ -8,16 +8,17 @@ import (
 	"github.com/flannel-dev-lab/RBAC/vars"
 )
 
+// RBACObject Exposes the RBAC object methods
 type RBACObject struct {
 	DBService database.DatabaseService
 }
 
-// Create an Object
+// CreateObject Create an Object
 func (rbacObject *RBACObject) CreateObject(name, description string) (vars.Object, error) {
 	return rbacObject.DBService.CreateObject(name, description)
 }
 
-// Remove an Object
+// RemoveObject Remove an existing Object
 func (rbacObject *RBACObject) RemoveObject(objectId int) (bool, error) {
 	return rbacObject.DBService.RemoveObject(objectId)
 }

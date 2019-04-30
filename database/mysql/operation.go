@@ -5,6 +5,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// AddOperation Adds a new operation
 func (databaseService *DatabaseService) AddOperation(name, description string) (operation vars.Operation, err error) {
 	stmt, err := databaseService.Conn.Prepare("INSERT INTO `rbac_operation` SET `name`= ?, description = ?")
 	if err != nil {
@@ -28,6 +29,7 @@ func (databaseService *DatabaseService) AddOperation(name, description string) (
 	return operation, nil
 }
 
+// DeleteOperation Deletes an existing operation
 func (databaseService *DatabaseService) DeleteOperation(operationId int) (bool, error) {
 	stmt, prepErr := databaseService.Conn.Prepare("DELETE FROM `rbac_operation` WHERE `rbac_operation_id` = ?")
 	if prepErr != nil {

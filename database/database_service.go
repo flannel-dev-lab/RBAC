@@ -5,7 +5,7 @@ import (
 	"github.com/flannel-dev-lab/RBAC/database/mysql"
 	"github.com/flannel-dev-lab/RBAC/vars"
 )
-
+// DatabaseService Interface to expose DB Methods
 type DatabaseService interface {
 	// Creates a DB Connection
 	CreateDBConnection(driver, username, password, hostname, databaseName, port string) error
@@ -99,7 +99,7 @@ type DatabaseService interface {
 	CloseConnection() error
 }
 
-// Creates a Database object given the driver type
+// CreateDatabaseObject Creates a Database object given the driver type
 func CreateDatabaseObject(driver string) (DatabaseService, error) {
 	switch driver {
 	case "mysql":

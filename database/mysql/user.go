@@ -2,10 +2,10 @@ package mysql
 
 import (
 	"github.com/flannel-dev-lab/RBAC/vars"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql"	// Importing mysql Driver
 )
 
-// (RC-04) Core RBAC: Creates a new RBAC user.  The User will not carry any sessions during the creation
+// AddUser (RC-04) Core RBAC: Creates a new RBAC user.  The User will not carry any sessions during the creation
 func (databaseService *DatabaseService) AddUser(name string) (user vars.User, err error) {
 
 	stmt, err := databaseService.Conn.Prepare("INSERT INTO `rbac_user` SET `name`= ?")
@@ -29,9 +29,8 @@ func (databaseService *DatabaseService) AddUser(name string) (user vars.User, er
 	return user, nil
 }
 
-// (RC-26) Core RBAC: Deletes an existing user from RBAC, Deletes Sessions and User assignments
+// DeleteUser (RC-26) Core RBAC: Deletes an existing user from RBAC, Deletes Sessions and User assignments
 func (databaseService *DatabaseService) DeleteUser(userId int) (bool, error) {
-	// TODO Delete User Assignments and Delete Sessions
 	stmt, err := databaseService.Conn.Prepare("DELETE FROM `rbac_user` WHERE `rbac_user_id`= ?")
 
 	if err != nil {
@@ -46,7 +45,7 @@ func (databaseService *DatabaseService) DeleteUser(userId int) (bool, error) {
 	return true, nil
 }
 
-// (RC-09) Core RBAC: Returns a set of roles assigned to a given user
+// AssignedRoles (RC-09) Core RBAC: Returns a set of roles assigned to a given user
 func (databaseService *DatabaseService) AssignedRoles(userId int) ([]vars.Role, error) {
 	stmt, prepErr := databaseService.Conn.Prepare("SELECT `rbac_role_id` FROM `rbac_user_role` WHERE `rbac_user_id` = ?")
 	if prepErr != nil {
@@ -71,7 +70,7 @@ func (databaseService *DatabaseService) AssignedRoles(userId int) ([]vars.Role, 
 	return roles, nil
 }
 
-// This function returns the set of operations a given user is permitted to perform on a given
+// UserOperationOnObject This function returns the set of operations a given user is permitted to perform on a given
 // object, obtained either directly or through his/her assigned roles.
 func (databaseService *DatabaseService) UserOperationOnObject(userId, objectId int) ([]vars.Operation, error) {
 	stmt, err := databaseService.Conn.Prepare("select rp.rbac_operation_id from rbac_permission rp inner join rbac_role_permission rrp on rp.rbac_permission_id=rrp.rbac_permission_id inner join rbac_user_role rur on rrp.rbac_role_id=rur.rbac_role_id where rur.rbac_user_id=? and rp.rbac_object_id=?")
