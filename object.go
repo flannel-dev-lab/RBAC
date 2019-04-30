@@ -1,7 +1,7 @@
 //  For a system that implements RBAC, the objects ANSI INCITS 359-2004
 // can represent information containers (e.g., files, directories, in an operating system,
 // and/or columns, rows, tables, and views within a database management system)
-package RBAC
+package rbac
 
 import (
     "github.com/flannel-dev-lab/RBAC/database"

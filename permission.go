@@ -1,4 +1,4 @@
-package RBAC
+package rbac
 
 import (
     "database/sql"

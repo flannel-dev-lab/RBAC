@@ -3,7 +3,7 @@
 // of system in which it will be implemented. For example, within a file system, operations
 // might include read, write, and execute; within a database management system, operations
 // might include insert, delete, append and update
-package RBAC
+package rbac
 
 import (
     "github.com/flannel-dev-lab/RBAC/database"

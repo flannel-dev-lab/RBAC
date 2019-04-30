@@ -1,4 +1,4 @@
-package RBAC
+package rbac
 
 import (
 	"github.com/flannel-dev-lab/RBAC/database"

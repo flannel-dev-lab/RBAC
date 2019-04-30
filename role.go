@@ -6,7 +6,7 @@
 //
 // RBAC stands for Role Based Access Control. This package is meant
 // to facilitate access control at any size.
-package RBAC
+package rbac
 
 import (
     "github.com/flannel-dev-lab/RBAC/database"
