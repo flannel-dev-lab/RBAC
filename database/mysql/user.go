@@ -96,4 +96,3 @@ func (databaseService *DatabaseService) UserOperationOnObject(userId, objectId i
 
 	return operations, nil
 }
-

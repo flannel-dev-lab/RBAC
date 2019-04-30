@@ -1,4 +1,5 @@
 package rbac
+
 /*
 import (
     "github.com/flannel-dev-lab/RBAC/database"
@@ -69,7 +70,7 @@ func TestCheckAccess(t *testing.T) {
     session := vars.Session{Id: 1, UserId: 1, Name: "test-session"}
     operation := Operation{Id: 1, Name: "testOperation", Description: "Reserved permission for test"}
     object := vars.Object{Id: 1, Name: "testObject", Description: "Reserved object for testing"}
-    
+
     _, err := CheckAccess(session, operation, object)
 
     if err != nil {

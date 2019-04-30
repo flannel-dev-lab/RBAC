@@ -8,8 +8,6 @@ import (
 	"testing"
 )
 
-
-
 func setupUserTest(userObject *UserObject) {
 	dbService, err := database.CreateDatabaseObject("mysql")
 	if err != nil {
@@ -44,7 +42,7 @@ func TestAddUser(t *testing.T) {
 	setupUserTest(&userObject)
 	user, err := userObject.AddUser("test-user")
 	if err != nil {
-		t.Errorf("%v", err)
+		t.Fatalf("%v", err)
 	}
 
 	// Cleanup
@@ -58,7 +56,7 @@ func TestDeleteUser(t *testing.T) {
 	setupUserTest(&userObject)
 	user, err := userObject.AddUser("test-user")
 	if err != nil {
-		t.Errorf("%v", err)
+		t.Fatalf("%v", err)
 	}
 
 	// Cleanup

@@ -6,8 +6,6 @@ import (
 	"github.com/flannel-dev-lab/RBAC/vars"
 )
 
-
-
 type DatabaseService interface {
 	// Creates a DB Connection
 	CreateDBConnection(driver, username, password, hostname, databaseName, port string) error

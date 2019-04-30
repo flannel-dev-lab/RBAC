@@ -26,6 +26,6 @@ func (userObject *UserObject) AssignedRoles(userId int) ([]vars.Role, error) {
 
 // This function returns the set of operations a given user is permitted to perform on a given
 // object, obtained either directly or through his/her assigned roles.
-func (userObject *UserObject) UserOperationOnObject(userId, objectId int)  ([]vars.Operation, error) {
+func (userObject *UserObject) UserOperationOnObject(userId, objectId int) ([]vars.Operation, error) {
 	return userObject.DBService.UserOperationOnObject(userId, objectId)
 }

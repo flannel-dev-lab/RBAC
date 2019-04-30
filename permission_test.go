@@ -8,7 +8,6 @@ import (
 	"testing"
 )
 
-
 func setupPermissionObjectTest(permissionObject *PermissionObject, rbacObject *RBACObject, operationObject *OperationObject, roleObject *RoleObject, userObject *UserObject, sessionObject *SessionObject) {
 	dbService, err := database.CreateDatabaseObject("mysql")
 	if err != nil {
@@ -67,7 +66,6 @@ func tearDownPermissionObjectTest(permissionObject *PermissionObject, rbacObject
 	}
 }
 
-
 func TestGrantPermission(t *testing.T) {
 	var permissionObject PermissionObject
 	var rbacObject RBACObject
@@ -104,7 +102,6 @@ func TestGrantPermission(t *testing.T) {
 	if err != nil {
 		t.Errorf(err.Error())
 	}
-
 
 	rolePermission, err := permissionObject.RolePermissions(role.Id)
 	if err != nil {

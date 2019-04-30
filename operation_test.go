@@ -7,7 +7,6 @@ import (
 	"testing"
 )
 
-
 func setupOperationObjectTest(operationObject *OperationObject) {
 	dbService, err := database.CreateDatabaseObject("mysql")
 	if err != nil {
@@ -42,7 +41,7 @@ func TestAddOperation(t *testing.T) {
 	object, err := operationObject.AddOperation("test-operation", "test-operation-description")
 
 	if err != nil {
-		t.Errorf("%v", err)
+		t.Fatalf("%v", err)
 	}
 
 	// Cleanup
@@ -56,11 +55,10 @@ func TestDeleteOperation(t *testing.T) {
 	object, err := operationObject.AddOperation("test-operation", "test-operation-description")
 
 	if err != nil {
-		t.Errorf("%v", err)
+		t.Fatalf("%v", err)
 	}
 
 	// Cleanup
 	_, err = operationObject.DeleteOperation(object.Id)
 	tearDownOperationObjectTest(&operationObject)
 }
-

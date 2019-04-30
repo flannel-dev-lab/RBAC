@@ -37,7 +37,7 @@ type Operation struct {
 
 // A Permission is a a combination of object & operation that can be enforced
 type Permission struct {
-	Id              int	`json:"rbac_permission_id"`
-	ObjectId        int	`json:"rbac_object_id"`
-	OperationId     int	`json:"rbac_operation_id"`
+	Id          int `json:"rbac_permission_id"`
+	ObjectId    int `json:"rbac_object_id"`
+	OperationId int `json:"rbac_operation_id"`
 }
