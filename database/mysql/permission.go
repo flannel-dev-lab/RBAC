@@ -128,7 +128,7 @@ func (databaseService *DatabaseService) UserPermissions(userId int) ([]vars.Perm
 
 // SessionPermissions (RC-35) Core RBAC: Return the set of permissions assigned to a given session
 func (databaseService *DatabaseService) SessionPermissions(sessionId int) ([]vars.Permission, error) {
-	stmt, err := databaseService.Conn.Prepare("SELECT rp.rbac_permission_id, rp.rbac_object_id, rp.rbac_operation_id FROM rbac_session rs JOIN rbac_user_role rur ON rs.rbac_user_id = rur.rbac_user_id JOIN rbac_role_permission rrp ON rur.rbac_role_id = rrp.rbac_role_id JOIN rbac_permission rp ON rrp.rbac_permission_id = rp.rbac_permission_id WHERE rs.name = ?")
+	stmt, err := databaseService.Conn.Prepare("SELECT rp.rbac_permission_id, rp.rbac_object_id, rp.rbac_operation_id FROM rbac_session rs JOIN rbac_user_role rur ON rs.rbac_user_id = rur.rbac_user_id JOIN rbac_role_permission rrp ON rur.rbac_role_id = rrp.rbac_role_id JOIN rbac_permission rp ON rrp.rbac_permission_id = rp.rbac_permission_id WHERE rs.rbac_session_id = ?")
 	if err != nil {
 		return nil, err
 	}
