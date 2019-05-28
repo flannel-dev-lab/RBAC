@@ -19,6 +19,6 @@ func (rbacObject *RBACObject) CreateObject(name, description string) (vars.Objec
 }
 
 // RemoveObject Remove an existing Object
-func (rbacObject *RBACObject) RemoveObject(objectId int) (bool, error) {
-	return rbacObject.DBService.RemoveObject(objectId)
+func (rbacObject *RBACObject) RemoveObject(objectName string) (bool, error) {
+	return rbacObject.DBService.RemoveObject(objectName)
 }

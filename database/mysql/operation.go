@@ -30,13 +30,13 @@ func (databaseService *DatabaseService) AddOperation(name, description string) (
 }
 
 // DeleteOperation Deletes an existing operation
-func (databaseService *DatabaseService) DeleteOperation(operationId int) (bool, error) {
-	stmt, prepErr := databaseService.Conn.Prepare("DELETE FROM `rbac_operation` WHERE `rbac_operation_id` = ?")
+func (databaseService *DatabaseService) DeleteOperation(operationName string) (bool, error) {
+	stmt, prepErr := databaseService.Conn.Prepare("DELETE FROM `rbac_operation` WHERE `name` = ?")
 	if prepErr != nil {
 		return false, prepErr
 	}
 
-	_, err := stmt.Exec(operationId)
+	_, err := stmt.Exec(operationName)
 	if err != nil {
 		return false, err
 	}

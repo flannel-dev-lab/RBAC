@@ -16,11 +16,11 @@ type OperationObject struct {
 }
 
 // AddOperation Creates a new operation
-func (operationObject *OperationObject) AddOperation(name, description string) (vars.Operation, error) {
-	return operationObject.DBService.AddOperation(name, description)
+func (operationObject *OperationObject) AddOperation(operationName, description string) (vars.Operation, error) {
+	return operationObject.DBService.AddOperation(operationName, description)
 }
 
 // DeleteOperation Deletes a operation
-func (operationObject *OperationObject) DeleteOperation(operationId int) (bool, error) {
-	return operationObject.DBService.DeleteOperation(operationId)
+func (operationObject *OperationObject) DeleteOperation(operationName string) (bool, error) {
+	return operationObject.DBService.DeleteOperation(operationName)
 }
