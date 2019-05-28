@@ -6,13 +6,13 @@ import (
 )
 
 // CreateObject Create an Object
-func (databaseService *DatabaseService) CreateObject(name, description string) (object vars.Object, err error) {
+func (databaseService *DatabaseService) CreateObject(objectName, description string) (object vars.Object, err error) {
 	stmt, err := databaseService.Conn.Prepare("INSERT INTO `rbac_object` SET `name`= ?, description = ?")
 	if err != nil {
 		return object, err
 	}
 
-	result, err := stmt.Exec(name, description)
+	result, err := stmt.Exec(objectName, description)
 	if err != nil {
 		return object, err
 	}
@@ -23,20 +23,20 @@ func (databaseService *DatabaseService) CreateObject(name, description string) (
 	}
 
 	object.Id = int(insertId)
-	object.Name = name
+	object.Name = objectName
 	object.Description = description
 
 	return object, nil
 }
 
 // RemoveObject Removes an Object
-func (databaseService *DatabaseService) RemoveObject(objectId int) (bool, error) {
-	stmt, prepErr := databaseService.Conn.Prepare("DELETE FROM `rbac_object` WHERE `rbac_object_id` = ?")
+func (databaseService *DatabaseService) RemoveObject(objectName string) (bool, error) {
+	stmt, prepErr := databaseService.Conn.Prepare("DELETE FROM `rbac_object` WHERE `name` = ?")
 	if prepErr != nil {
 		return false, prepErr
 	}
 
-	_, err := stmt.Exec(objectId)
+	_, err := stmt.Exec(objectName)
 	if err != nil {
 		return false, err
 	}
