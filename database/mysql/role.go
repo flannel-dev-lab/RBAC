@@ -128,7 +128,7 @@ func (databaseService *DatabaseService) SessionRoles(sessionName string) ([]vars
 
 // RoleOperationOnObject This function returns the set of operations a given role is permitted to perform on a given object
 func (databaseService *DatabaseService) RoleOperationOnObject(roleName, objectName string) ([]vars.Operation, error) {
-	stmt, err := databaseService.Conn.Prepare("select rp.rbac_operation_name from rbac_permission rp inner join rbac_role_permission rrp on rp.rbac_permission_id=rrp.rbac_permission_id where rp.rbac_object_name=? and rrp.rbac_role_name=?")
+	stmt, err := databaseService.Conn.Prepare("select distinct rp.rbac_operation_name from rbac_permission rp inner join rbac_role_permission rrp on rp.rbac_permission_id=rrp.rbac_permission_id where rp.rbac_object_name=? and rrp.rbac_role_name=?")
 	if err != nil {
 		return nil, err
 	}
